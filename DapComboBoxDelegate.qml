@@ -12,7 +12,7 @@ ItemDelegate {
         id:textDelegateComboBox
         anchors.fill: parent
         anchors.topMargin: 8 * pt
-        anchors.leftMargin: popup.visible ? spacingEdgeActive : spacingEdgeNormal
+        anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
         verticalAlignment: Qt.AlignTop
         font.family: fontRobotoRegular.name
             font.pixelSize: fontSizeComboBox
