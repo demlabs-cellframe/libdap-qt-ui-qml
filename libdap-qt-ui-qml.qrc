@@ -5,5 +5,6 @@
         <file>DapComboBox.qml</file>
         <file>DapComboBoxForm.ui.qml</file>
         <file>DapChartCandleStick.qml</file>
+        <file>DapChartCandleStickForm.ui.qml</file>
     </qresource>
 </RCC>

@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-Canvas {
+DapChartCandleStickForm {
     //@detalis rightTime Indicates the completion time of the graph on the display.
     property var rightTime: 1546564800
     ///@detalis maxXLine Indicates the maximum number of vertical lines.
