@@ -223,6 +223,8 @@ DapChartCandleStickForm {
             if(minPrice > candleModel.get(count).minimum) minPrice = candleModel.get(count).minimum;
             if(maxPrice < candleModel.get(count).maximum) maxPrice = candleModel.get(count).maximum;
         }
+        if(currentValue>maxPrice)maxPrice=currentValue;
+        if(currentValue<minPrice)minPrice=currentValue;
         thisProperty.maxValuePrice = maxPrice;
         thisProperty.minValuePrice = minPrice;
     }
