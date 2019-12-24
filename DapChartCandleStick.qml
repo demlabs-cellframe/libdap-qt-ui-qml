@@ -231,6 +231,7 @@ DapChartCandleStickForm {
 
     ///Initiation property.
     function init(){
+        thisProperty.fieldYMin = imageCursorHeight/2;
         thisProperty.fieldXMax = chartCanvas.width - rightTextField - marginHorizontalLineToYAxisText;
         thisProperty.fieldYMax = chartCanvas.height - fontSizeArea - topMarginXAxisText - bottomOutLine;
         thisProperty.intervalPrice = thisProperty.maxValuePrice - thisProperty.minValuePrice;
@@ -266,8 +267,6 @@ DapChartCandleStickForm {
     function valuePriceYLineChart(ctx)
     {
         var realInterval = (thisProperty.fieldYMax - thisProperty.fieldYMin)/maxYLine;
-
-        var priceInterval = thisProperty.intervalPrice / maxYLine;
         var stepPrise = 10;
 
         for(var scanStep = 1; scanStep < 100000;scanStep*=10)
@@ -284,7 +283,8 @@ DapChartCandleStickForm {
             else
                 if(thisProperty.fieldYMax-((stepPrise*count/thisProperty.yRealFactor))>heightNoLine)
                 {
-                    horizontalLineChart(ctx,thisProperty.fieldYMax-((stepPrise*count/thisProperty.yRealFactor)),thisProperty.minValuePrice+stepPrise*count);
+                    var stepTo = stepPrise*count - thisProperty.minValuePrice%stepPrise;
+                    horizontalLineChart(ctx,thisProperty.fieldYMax-((stepTo/thisProperty.yRealFactor)),thisProperty.minValuePrice+stepTo);
                 }
         }
         horizontalLineCurrentLevelChart(ctx,thisProperty.fieldYMax - (currentValue - thisProperty.minValuePrice)/thisProperty.yRealFactor,currentValue);
@@ -305,12 +305,11 @@ DapChartCandleStickForm {
     //Vertical line draw.
     function verticalLineChart(ctx,x,text)
     {
-
         ctx.beginPath()
         ctx.lineWidth = lineWidthArea;
         ctx.strokeStyle = lineColorArea;
         ctx.moveTo(x, chartCanvas.height-fontSizeArea-topMarginXAxisText);
-        ctx.lineTo(x, 0);
+        ctx.lineTo(x, thisProperty.fieldYMin);
         ctx.font = "normal "+fontSizeArea+ "px Roboto";
         ctx.fillStyle = fontColorArea;
         ctx.fillText(text,x-13,chartCanvas.height);
