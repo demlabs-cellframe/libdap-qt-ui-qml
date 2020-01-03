@@ -3,7 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.0
 
-ComboBox {
+ComboBox 
+{
     ///@detalis normalColorText Text color in normal state.
     property string normalColorText
     ///@detalis hilightColorText Text color in selected state.
@@ -73,77 +74,92 @@ ComboBox {
     anchors.verticalCenter: parent.verticalCenter
 
     //Icon icon near the text (arrow)
-    indicator: Image {
-        source: parent.popup.visible ? indicatorImageActive : indicatorImageNormal
-        width: indicatorWidth
-        height: indicatorHeight
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        anchors.rightMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
-    }
+    indicator: 
+        Image 
+        {
+            source: parent.popup.visible ? indicatorImageActive : indicatorImageNormal
+            width: indicatorWidth
+            height: indicatorHeight
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
+        }
 
     //Defining the background for the main line
-    background: Rectangle {
-        anchors.fill: parent
-        color: parent.popup.visible ? hilightTopColor : normalTopColor
-        radius: 2 * pt
-        height: parent.height
-    }
+    background: 
+        Rectangle 
+        {
+            anchors.fill: parent
+            color: parent.popup.visible ? hilightTopColor : normalTopColor
+            radius: 2 * pt
+            height: parent.height
+        }
     //Main line text settings
-    contentItem: Text {
-        id:textTopComboBox
-        anchors.fill: parent
-        anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
-        text: parent.displayText
-        font: parent.font
-        color: popup.visible ? hilightColorTopText : normalColorTopText
-        verticalAlignment: Text.AlignVCenter
-    }
+    contentItem: 
+        Text 
+        {
+            id:textTopComboBox
+            anchors.fill: parent
+            anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
+            text: parent.displayText
+            font: parent.font
+            color: popup.visible ? hilightColorTopText : normalColorTopText
+            verticalAlignment: Text.AlignVCenter
+        }
 
     //Customize drop-down list with shadow effect
-    popup: Popup {
-        y: parent.height - 1
-        width: parent.width + 1
-        padding: 1
-        contentItem: ListView {
-            clip: true
-            implicitHeight: contentHeight
-            model: customComboBox.popup.visible ? customComboBox.delegateModel : null
-            ScrollIndicator.vertical: ScrollIndicator {}
+    popup: 
+        Popup 
+        {
+            y: parent.height - 1
+            width: parent.width + 1
+            padding: 1
+            contentItem:
+                ListView 
+                {
+                    clip: true
+                    implicitHeight: contentHeight
+                    model: customComboBox.popup.visible ? customComboBox.delegateModel : null
+                    ScrollIndicator.vertical: ScrollIndicator {}
+                }
+    
+            background: 
+                Rectangle
+                {
+                    width: customComboBox.background.width
+                    color: normalColor
+                    Rectangle 
+                    {
+                        id: contentCorner
+                        anchors.fill: parent
+                    }
+        
+                    DropShadow 
+                    {
+                        anchors.fill: parent
+                        source: contentCorner
+                        verticalOffset: 9 * pt
+                        samples: 13 * pt
+                        color: colorDropShadow
+                    }
+                }
         }
 
-        background: Rectangle {
-            width: customComboBox.background.width
-            color: normalColor
-            Rectangle {
-                id: contentCorner
-                anchors.fill: parent
-            }
-
-            DropShadow {
-                anchors.fill: parent
-                source: contentCorner
-                verticalOffset: 9 * pt
-                samples: 13 * pt
-                color: colorDropShadow
-            }
-        }
-    }
-
-    //Shadow effect for the top element.
-    DropShadow {
-        anchors.fill: if (topEffect)
-                          parent
-        source: if (topEffect)
-                    background
-        verticalOffset: if (topEffect)
-                            9 * pt
+        //Shadow effect for the top element.
+        DropShadow 
+        {
+            anchors.fill: if (topEffect)
+                              parent
+            source: if (topEffect)
+                        background
+            verticalOffset: if (topEffect)
+                                9 * pt
+                            else 0
+            samples: if (topEffect)
+                         13 * pt
                         else 0
-        samples: if (topEffect)
-                     13 * pt
-                    else 0
-        color: if (topEffect)
-                   customComboBox.popup.visible ? colorDropShadow : colorTopNormalDropShadow
-                else "#00000000"
+            color: if (topEffect)
+                       customComboBox.popup.visible ? colorDropShadow : colorTopNormalDropShadow
+                    else "#00000000"
+        }
     }
-}

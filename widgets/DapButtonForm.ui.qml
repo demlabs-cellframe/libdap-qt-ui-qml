@@ -31,7 +31,7 @@ Button {
     ///@detalis fontButton Font setting.
     property alias fontButton:buttonText.font
     ///@detalis existenceImage Indicates the presence of an image.
-    property bool existenceImage:true
+    property bool existenceImage: true
     ///@detalis horizontalAligmentText Horizontal alignment.
     property alias horizontalAligmentText:buttonText.horizontalAlignment
     ///@detalis colorBackgroundButton This property overrides the background color.
@@ -45,34 +45,38 @@ Button {
 
     id: dapButton
 
-    contentItem: Rectangle {
-        id: dapBackgroundButton
-        anchors.fill: parent
-        color: dapButton.hovered ? colorBackgroundHover : colorBackgroundNormal
-        implicitWidth: widthButton
-        implicitHeight: heightButton
-        border.color: borderColorButton
-        border.width: borderWidthButton
-        ///button text
-        Text {
-            id: buttonText
+    contentItem: 
+        Rectangle 
+        {
+            id: dapBackgroundButton
             anchors.fill: parent
-            verticalAlignment: Qt.AlignVCenter
-            horizontalAlignment: Qt.AlignRight
-            anchors.rightMargin: indentTextRight
-            color: dapButton.hovered ? colorButtonTextHover : colorButtonTextNormal
-            text: qsTr(textButton)
+            color: dapButton.hovered ? colorBackgroundHover : colorBackgroundNormal
+            implicitWidth: widthButton
+            implicitHeight: heightButton
+            border.color: borderColorButton
+            border.width: borderWidthButton
+            ///button text
+            Text 
+            {
+                id: buttonText
+                anchors.fill: parent
+                verticalAlignment: Qt.AlignVCenter
+                horizontalAlignment: Qt.AlignRight
+                anchors.rightMargin: indentTextRight
+                color: dapButton.hovered ? colorButtonTextHover : colorButtonTextNormal
+                text: qsTr(textButton)
+            }
+    
+            ///button picture
+            Image
+            {
+                id: iconNewWallet
+                anchors.verticalCenter: if(existenceImage)parent.verticalCenter
+                anchors.left: if(existenceImage)parent.left
+                anchors.leftMargin:if(existenceImage) indentImageLeftButton
+                source: if(existenceImage) dapButton.hovered ? hoverImageButton : normalImageButton
+                width: if(existenceImage)widthImageButton
+                height:if(existenceImage) heightImageButton
+            }
         }
-
-        ///button picture
-        Image {
-            id: iconNewWallet
-            anchors.verticalCenter: if(existenceImage)parent.verticalCenter
-            anchors.left: if(existenceImage)parent.left
-            anchors.leftMargin:if(existenceImage) indentImageLeftButton
-            source: if(existenceImage) dapButton.hovered ? hoverImageButton : normalImageButton
-            width: if(existenceImage)widthImageButton
-            height:if(existenceImage) heightImageButton
-        }
-    }
 }
