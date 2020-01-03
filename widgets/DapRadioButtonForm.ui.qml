@@ -16,19 +16,19 @@ RadioButton
     ///@detalis backgroundColor RadioButton background color
     property alias backgroundColor:backgroundColor.color
     ///@detalis spaceIndicatorText The gap between the indicator and the text.
-    property int spaceIndicatorText: 15 * pt
+    property int spaceIndicatorText
     ///@detalis indicatorBorderColor Border color indicator.
-    property string indicatorBorderColor:"#3E3853"
+    property string indicatorBorderColor
     ///@detalis indicatorBackgroundColor Background color indicator.
-    property string indicatorBackgroundColor:"transparent"
+    property string indicatorBackgroundColor
     ///@detalis indicatorInnerColorActiv Color of the inner circle in checked condition.
-    property string indicatorInnerColorActiv:indicatorBorderColor
+    property string indicatorInnerColorActiv
     ///@detalis indicatorInnerColorNormal Color of the inner circle in normal condition.
-    property string indicatorInnerColorNormal:indicatorBackgroundColor
+    property string indicatorInnerColorNormal
     ///@detalis indicatorSize The size of the main circle of the indicator.
-    property int indicatorSize: 25 * pt
+    property int indicatorSize
     ///@detalis indicatorInnerSize The size of the inner circle of the indicator.
-    property int indicatorInnerSize: 15 * pt
+    property int indicatorInnerSize
 
     id: customRadioButton
 

@@ -27,7 +27,7 @@ DapComboBoxForm
             anchors.fill: parent
             anchors.topMargin: paddingTopItemDelegate
             anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
-            font.family: "Roboto"
+            font.family: fontFamily
             font.pixelSize: fontSizeComboBox
             text: if(index != currentIndex)
                       return modelData;
@@ -40,12 +40,12 @@ DapComboBoxForm
         background: Rectangle {
             anchors.fill: parent
             anchors.bottomMargin: {
-                if(index == countComboBox - 2)
+                if(index == count - 2)
                 {
                     if(index+1 == currentIndex) return bottomIntervalListElement
                     else return intervalListElement
                 }
-                if (index == countComboBox - 1) return bottomIntervalListElement
+                if (index == count - 1) return bottomIntervalListElement
                 return intervalListElement
             }
             color: hovered ? hilightColor : normalColor

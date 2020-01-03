@@ -5,70 +5,70 @@ import QtGraphicalEffects 1.0
 
 ComboBox {
     ///@detalis normalColorText Text color in normal state.
-    property string normalColorText: "#070023"
+    property string normalColorText
     ///@detalis hilightColorText Text color in selected state.
-    property string hilightColorText: "#FFFFFF"
+    property string hilightColorText
     ///@detalis normalColorTopText Text color in the main line in normal state.
-    property string normalColorTopText: normalColorText
+    property string normalColorTopText
     ///@detalis hilightColorTopText Text color in the main line in active state.
-    property string hilightColorTopText: normalColorText
+    property string hilightColorTopText
     ///@detalis normalColor Item color in normal state.
-    property string normalColor: "#FFFFFF"
+    property string normalColor
     ///@detalis hilightColor Item color in selected state.
-    property string hilightColor: "#330F54"
+    property string hilightColor
     ///@detalis normalTopColor Top string color in normal state.
-    property string normalTopColor: normalColor
+    property string normalTopColor
     ///@detalis hilightTopColor Top string color in selected state.
-    property string hilightTopColor: normalColor
+    property string hilightTopColor
     ///@detalis fontSizeComboBox Font size for the entire widget.
-    property int fontSizeComboBox: 16 * pt
+    property int fontSizeComboBox
+    ///@detalis fontFamely Font family ComboBox.
+    property string fontFamily
     ///@detalis widthPopupComboBoxNormal Width of the combo box in the normal state.
-    property int widthPopupComboBoxNormal: parent.width
+    property int widthPopupComboBoxNormal
     ///@detalis widthPopupComboBoxActive Width of the ComboBox in the active state.
-    property int widthPopupComboBoxActive: widthPopupComboBoxNormal
+    property int widthPopupComboBoxActive
     ///@detalis heightComboBoxNormal Height of the ComboBox in the normal state.
-    property int heightComboBoxNormal: parent.height
+    property int heightComboBoxNormal
     ///@detalis heightComboBoxActive Height of the ComboBox in the active state.
-    property int heightComboBoxActive: heightComboBoxNormal
+    property int heightComboBoxActive
     ///@detalis sidePaddingNormal: Sets the indent from the edge of the right and left edges of the parent in the normal state.
-    property int sidePaddingNormal: 16 * pt
+    property int sidePaddingNormal
     ///@detalis sidePaddingActive Sets the indent from the edge of the right and left edges of the parent in the active state.
-    property int sidePaddingActive: sidePaddingNormal
+    property int sidePaddingActive
     ///@detalis topIndentNormal Sets the indent from the edge of the upper of the parent in the normal state.
-    property int topIndentNormal: 12 * pt
+    property int topIndentNormal
     ///@detalis topIndentActive Sets the indent from the edge of the upper of the parent in the active state.
-    property int topIndentActive: topIndentNormal
+    property int topIndentActive
     ///@detalis bottomIndentNormal Sets the indent from the edge of the lower of the parent in the normal state.
-    property int bottomIndentNormal: 14 * pt
+    property int bottomIndentNormal
     ///@detalis bottomIndentActive Sets the indent from the edge of the lower of the parent in the active state.
-    property int bottomIndentActive: bottomIndentNormal
+    property int bottomIndentActive
     ///@detalis paddingTopItemDelegate Indent above from item delegate.
-    property int paddingTopItemDelegate: 8 * pt
+    property int paddingTopItemDelegate
     ///@detalis paddingBottomItemDelegate Indent below from item delegate.
-    property int paddingBottomItemDelegate: paddingTopItemDelegate
+    property int paddingBottomItemDelegate
     ///@detalis heightListElement List item height.
-    property int heightListElement: 32 * pt
+    property int heightListElement
     ///@detalis intervalListElement Spacing between items in a list.
-    property int intervalListElement: 10 * pt
+    property int intervalListElement
     ///@detalis bottomIntervalListElement Spacing from bottom to bottom.
-    property int bottomIntervalListElement: intervalListElement
+    property int bottomIntervalListElement
     ///@detalis topEffect Using an effect for the top element.
-    property bool topEffect: true
+    property bool topEffect
     ///@detalis indicatorImageNormal Indicator picture address for normal state.
-    property string indicatorImageNormal: "qrc:/res/icons/ic_arrow_drop_down_dark_blue.png"
+    property string indicatorImageNormal
     ///@detalis indicatorImageActive Indicator picture address for active state.
-    property string indicatorImageActive: "qrc:/res/icons/ic_arrow_drop_up_dark_blue.png"
+    property string indicatorImageActive
     ///@detalis indicatorWidth Indicator width.
-    property int indicatorWidth: 24 * pt
+    property int indicatorWidth
     ///@detalis indicatorHeight Indicator height.
-    property int indicatorHeight: indicatorWidth
+    property int indicatorHeight
     /// colorTopNormalDropShadow Color of the shadow effect of the combo box when minimized.
-    property string colorTopNormalDropShadow: "#00000000"
+    property string colorTopNormalDropShadow
     ///@detalis colorDropShadow Unboxed shadow color in expanded state.
-    property string colorDropShadow: "#40ABABAB"
-    ///@detalis countComboBox this variable indicates the number of lines in the list for
-    ///the delegate in the file DapComboBox.qml.
-    property int countComboBox: customComboBox.count
+    property string colorDropShadow
+
 
     id: customComboBox
     width: popup.visible ? widthPopupComboBoxActive : widthPopupComboBoxNormal
@@ -97,7 +97,7 @@ ComboBox {
         anchors.fill: parent
         anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
         text: parent.displayText
-        font.family: "Roboto"
+        font.family: fontFamily
         font.pixelSize: fontSizeComboBox
         color: popup.visible ? hilightColorTopText : normalColorTopText
         verticalAlignment: Text.AlignVCenter
