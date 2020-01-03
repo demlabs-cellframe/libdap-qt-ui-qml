@@ -5,10 +5,10 @@ RadioButton
 {
     ///@detalis textButton Text RadioButton.
     property alias nameRadioButton: nameButton.text
+    ///@detalis fontText Font setting.
+    property alias fontRadioButton:nameButton.font
     ///@detalis nameTextColor Text color.
     property alias nameTextColor: nameButton.color
-    ///@detalis nameTextPixelSize Text size(px).
-    property alias nameTextPixelSize: nameButton.font.pixelSize
     ///@detalis widthRadioButton Width RadioButton.
     property alias widthRadioButton: customRadioButton.implicitWidth
     ///@detalis heightRadioButton Height RadioButton.
@@ -28,7 +28,8 @@ RadioButton
     ///@detalis indicatorSize The size of the main circle of the indicator.
     property int indicatorSize
     ///@detalis indicatorInnerSize The size of the inner circle of the indicator.
-    property int indicatorInnerSize
+    property int indicatorInnerSize   
+
 
     id: customRadioButton
 
@@ -41,8 +42,6 @@ RadioButton
         verticalAlignment: Text.AlignVCenter
         anchors.verticalCenter: parent.verticalCenter
         color: "#3E3853"
-        font.pixelSize: 16 * pt
-        font.family: "Roboto"
         horizontalAlignment: Text.AlignLeft
         text: qsTr("template")
     }

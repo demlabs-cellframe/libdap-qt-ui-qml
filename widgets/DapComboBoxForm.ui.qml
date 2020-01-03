@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.0
@@ -20,10 +20,6 @@ ComboBox {
     property string normalTopColor
     ///@detalis hilightTopColor Top string color in selected state.
     property string hilightTopColor
-    ///@detalis fontSizeComboBox Font size for the entire widget.
-    property int fontSizeComboBox
-    ///@detalis fontFamely Font family ComboBox.
-    property string fontFamily
     ///@detalis widthPopupComboBoxNormal Width of the combo box in the normal state.
     property int widthPopupComboBoxNormal
     ///@detalis widthPopupComboBoxActive Width of the ComboBox in the active state.
@@ -68,7 +64,8 @@ ComboBox {
     property string colorTopNormalDropShadow
     ///@detalis colorDropShadow Unboxed shadow color in expanded state.
     property string colorDropShadow
-
+    ///@detalis fontComboBox Font setting combobox.
+    property alias fontComboBox:customComboBox.font
 
     id: customComboBox
     width: popup.visible ? widthPopupComboBoxActive : widthPopupComboBoxNormal
@@ -94,11 +91,11 @@ ComboBox {
     }
     //Main line text settings
     contentItem: Text {
+        id:textTopComboBox
         anchors.fill: parent
         anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
         text: parent.displayText
-        font.family: fontFamily
-        font.pixelSize: fontSizeComboBox
+        font: parent.font
         color: popup.visible ? hilightColorTopText : normalColorTopText
         verticalAlignment: Text.AlignVCenter
     }

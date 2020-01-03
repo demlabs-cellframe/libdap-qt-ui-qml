@@ -3,8 +3,11 @@ import QtQuick.Controls 2.0
 
 DapComboBoxForm
 {
+    id:dapComboBox
+
     delegate:ItemDelegate
     {
+
         width: parent.width
 
         //Adjusting the height of the line, taking into account that the second element from the end may be the last
@@ -27,8 +30,7 @@ DapComboBoxForm
             anchors.fill: parent
             anchors.topMargin: paddingTopItemDelegate
             anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
-            font.family: fontFamily
-            font.pixelSize: fontSizeComboBox
+            font:dapComboBox.font
             text: if(index != currentIndex)
                       return modelData;
                   else return ""
