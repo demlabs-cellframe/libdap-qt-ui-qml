@@ -97,7 +97,7 @@ ComboBox {
         anchors.fill: parent
         anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
         text: parent.displayText
-        font.family: fontRobotoRegular.name
+        font.family: "Roboto"
         font.pixelSize: fontSizeComboBox
         color: popup.visible ? hilightColorTopText : normalColorTopText
         verticalAlignment: Text.AlignVCenter
@@ -117,7 +117,7 @@ ComboBox {
 
         background: Rectangle {
             width: customComboBox.background.width
-            color: parent.color
+            color: normalColor
             Rectangle {
                 id: contentCorner
                 anchors.fill: parent
@@ -141,9 +141,12 @@ ComboBox {
                     background
         verticalOffset: if (topEffect)
                             9 * pt
+                        else 0
         samples: if (topEffect)
                      13 * pt
+                    else 0
         color: if (topEffect)
                    customComboBox.popup.visible ? colorDropShadow : colorTopNormalDropShadow
+                else "#00000000"
     }
 }

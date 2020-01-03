@@ -11,12 +11,12 @@ DapComboBoxForm
         height:{
             if(index != currentIndex)
             {
-                if(index == customComboBox.count - 2)
+                if(index == (count - 2))
                 {
                     if(index+1 == currentIndex) return heightListElement + bottomIntervalListElement
                     else return heightListElement + intervalListElement
                 }
-                if (index == customComboBox.count - 1) return heightListElement + bottomIntervalListElement
+                if (index == count - 1) return heightListElement + bottomIntervalListElement
                 return heightListElement + intervalListElement
             }
             else return 0
@@ -27,9 +27,11 @@ DapComboBoxForm
             anchors.fill: parent
             anchors.topMargin: paddingTopItemDelegate
             anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
-            font.family: fontRobotoRegular.name
+            font.family: "Roboto"
             font.pixelSize: fontSizeComboBox
-            text: {if(index != currentIndex) return modelData;}
+            text: if(index != currentIndex)
+                      return modelData;
+                  else return ""
             color: hovered ? hilightColorText : normalColorText
         }
 
