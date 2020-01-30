@@ -64,9 +64,13 @@ ComboBox
     ///@detalis mainLineText Text without unneccesary part.
     property string mainLineText
 
+    ///@detalis comboBoxTextRole The model role used for the ComboBox.
+    property string comboBoxTextRole: ""
+
     width: popup.visible ? widthPopupComboBoxActive : widthPopupComboBoxNormal
     height: popup.visible ? heightComboBoxActive : heightComboBoxNormal
     anchors.verticalCenter: parent.verticalCenter
+    textRole: comboBoxTextRole
 
     //Icon icon near the text (arrow)
     indicator: 
