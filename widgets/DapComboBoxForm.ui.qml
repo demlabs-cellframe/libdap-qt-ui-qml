@@ -64,13 +64,18 @@ ComboBox
     ///@detalis mainLineText Text without unneccesary part.
     property string mainLineText
 
-    ///@detalis comboBoxTextRole The model role used for the ComboBox.
-    property string comboBoxTextRole: ""
+    ///@detalis comboBoxTextRole The model roles used for the ComboBox.
+    property var comboBoxTextRole: [""]
+    ///@detalis comboBoxRoleWidth The width of model roles used for the ComboBox.
+    property var comboBoxRoleWidth: [0]
+    ///@detalis roleInterval The width between text of model roles used for the ComboBox.
+    property int roleInterval
+    ///@detalis endRowPadding The width of padding at the end of one row at ComboBox where it is need.
+    property int endRowPadding: 0
 
     width: popup.visible ? widthPopupComboBoxActive : widthPopupComboBoxNormal
     height: popup.visible ? heightComboBoxActive : heightComboBoxNormal
     anchors.verticalCenter: parent.verticalCenter
-    textRole: comboBoxTextRole
 
     //Icon icon near the text (arrow)
     indicator: 

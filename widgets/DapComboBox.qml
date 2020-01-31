@@ -29,62 +29,82 @@ DapComboBoxForm
 
             //Text item
             contentItem:
-                Text
+                Rectangle
                 {
-                    id:textDelegateComboBox
+                    id: rectTextComboBox
                     anchors.fill: parent
                     anchors.topMargin: paddingTopItemDelegate
                     anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
                     anchors.rightMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
-                    font: fontComboBox
-
-                    //Calculates various properties of a given string of text for a particular font
-                    TextMetrics
+                    color: "transparent"
+                    property int comboBoxIndex: index
+                    property int comboBoxCurrentIndex: currentIndex
+                    Row
                     {
-                        id: tm
-                        font: fontComboBox
-                        elide: Text.ElideRight
-                        text: model[comboBoxTextRole]
-                        elideWidth:
-                            {
-                                if(index != currentIndex)
-                                    return widthPopupComboBoxActive - 2*sidePaddingActive;
-                                else
-                                    return widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval;
-                            }
-                    }
-                    FontMetrics
-                    {
-                        id: fm
-                        font: fontComboBox
-                    }
-                    text:
+                        spacing: 20 * pt
+                        Repeater
                         {
-                            if(index != currentIndex)
+                            id: rowRepeaterComboBox
+                            model: comboBoxTextRole.length
+                            Text
                             {
-                                if(tm.elidedText.length < tm.text.length)
-                                    return tm.elidedText.substring(0, tm.elidedText.length-1) +
-                                            ((fm.tightBoundingRect(tm.elidedText.substring(0, tm.elidedText.length-1)).width +
-                                              fm.tightBoundingRect(tm.text.charAt(tm.elidedText.length-1) + '..').width) < tm.elideWidth ?
-                                                 (tm.text.charAt(tm.elidedText.length-1) + '..')
-                                                    : '..');
-                                return tm.elidedText.replace('…', '..');
-                            }
-                            else
-                            {
-                                if(tm.elidedText.length < tm.text.length)
-                                    mainLineText = tm.elidedText.substring(0, tm.elidedText.length-1) +
-                                            ((fm.tightBoundingRect(tm.elidedText.substring(0, tm.elidedText.length-1)).width +
-                                              fm.tightBoundingRect(tm.text.charAt(tm.elidedText.length-1) + '..').width) < tm.elideWidth ?
-                                                 (tm.text.charAt(tm.elidedText.length-1) + '..')
-                                                    : '..');
-                                else
-                                    mainLineText = tm.elidedText.replace('…', '..');
-                                return "";
+                                id: comboBoxRoleText
+                                font: fontComboBox
+                                color: hovered ? hilightColorText : normalColorText
+                                width: 30
+                                //text: getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index])
+                                //Calculates various properties of a given string of text for a particular font
+                                TextMetrics
+                                {
+                                    id: tm
+                                    font: fontComboBox
+                                    elide: Text.ElideRight
+                                    text: getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index])
+                                    elideWidth: comboBoxRoleText.width
+
+                                }
+                                FontMetrics
+                                {
+                                    id: fm
+                                    font: fontComboBox
+                                }
+                                text:
+                                    {
+                                        //if(index != currentIndex)
+                                        //{
+                                            if(tm.elidedText.length < tm.text.length)
+                                                return tm.elidedText.substring(0, tm.elidedText.length-1) +
+                                                        ((fm.tightBoundingRect(tm.elidedText.substring(0, tm.elidedText.length-1)).width +
+                                                          fm.tightBoundingRect(tm.text.charAt(tm.elidedText.length-1) + '..').width) < tm.elideWidth ?
+                                                             (tm.text.charAt(tm.elidedText.length-1) + '..')
+                                                                : '..');
+                                            return tm.elidedText.replace('…', '..');
+                                       // }
+                                       /* else
+                                        {
+                                            if(tm.elidedText.length < tm.text.length)
+                                                mainLineText = tm.elidedText.substring(0, tm.elidedText.length-1) +
+                                                        ((fm.tightBoundingRect(tm.elidedText.substring(0, tm.elidedText.length-1)).width +
+                                                          fm.tightBoundingRect(tm.text.charAt(tm.elidedText.length-1) + '..').width) < tm.elideWidth ?
+                                                             (tm.text.charAt(tm.elidedText.length-1) + '..')
+                                                                : '..');
+                                            else
+                                                mainLineText = tm.elidedText.replace('…', '..');
+                                            return "";
+                                        }*/
+                                    }
                             }
                         }
-                    color: hovered ? hilightColorText : normalColorText
+                        Rectangle
+                        {
+                            id: endpaddingRectangle
+                            width: 44 //endRowPadding
+                            height: parent.height
+                            color: "yellow"
+                        }
+                    }
                 }
+
 
 
             //Indent from the bottom edge or the next line that will not stand out when you hover over the mouse
@@ -108,4 +128,9 @@ DapComboBoxForm
                 }
             highlighted: parent.highlightedIndex === index
         }
+
+    function getModelData(index, role)
+    {
+        return model.get(index)[role];
+    }
 }
