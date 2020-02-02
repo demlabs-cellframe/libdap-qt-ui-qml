@@ -32,75 +32,93 @@ DapComboBoxForm
                 Rectangle
                 {
                     id: rectTextComboBox
+
                     anchors.fill: parent
                     anchors.topMargin: paddingTopItemDelegate
                     anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
                     anchors.rightMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
                     color: "transparent"
+                    width:
+                    {
+                        (index !== currentIndex) ?
+                               widthPopupComboBoxNormal - 2*sidePaddingActive - endRowPadding :
+                               widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval - 2 * sidePaddingActive
+                        console.log(widthPopupComboBoxNormal - 2*sidePaddingActive - endRowPadding ,  widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval - 2 * sidePaddingActive)
+                    }
+                    FontMetrics
+                    {
+                        id: comboBoxFontMetric
+                        font: fontComboBox
+                    }
                     property int comboBoxIndex: index
                     property int comboBoxCurrentIndex: currentIndex
                     Row
                     {
-                        spacing: 20 * pt
+                        spacing: roleInterval
                         Repeater
                         {
-                            id: rowRepeaterComboBox
                             model: comboBoxTextRole.length
                             Text
                             {
-                                id: comboBoxRoleText
+                                id: textDelegateComboBox
                                 font: fontComboBox
                                 color: hovered ? hilightColorText : normalColorText
-                                width: 30
-                                //text: getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index])
-                                //Calculates various properties of a given string of text for a particular font
+                                width: (rectTextComboBox.width - roleInterval * (comboBoxTextRole.length - 1)) / comboBoxTextRole.length
+                               /* {
+                                    if(index === 0)
+                                        setModelDataWidth(rectTextComboBox.comboBoxIndex, comboBoxFontMetric, rectTextComboBox.width);
+                                    console.log("comboBoxIndex", rectTextComboBox.comboBoxIndex, "index", index, "comboBoxTextRole", comboBoxTextRole[index])
+                                    return comboBoxTextRoleWidth[index];
+                                }*/
                                 TextMetrics
                                 {
-                                    id: tm
+                                    id: comboBoxTextMetric
                                     font: fontComboBox
                                     elide: Text.ElideRight
                                     text: getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index])
-                                    elideWidth: comboBoxRoleText.width
+                                    elideWidth: textDelegateComboBox.width
 
                                 }
-                                FontMetrics
-                                {
-                                    id: fm
-                                    font: fontComboBox
-                                }
                                 text:
+                                {
+                                    console.log(textDelegateComboBox.width)
+                                    if(rectTextComboBox.comboBoxIndex != rectTextComboBox.comboBoxCurrentIndex)
                                     {
-                                        //if(index != currentIndex)
-                                        //{
-                                            if(tm.elidedText.length < tm.text.length)
-                                                return tm.elidedText.substring(0, tm.elidedText.length-1) +
-                                                        ((fm.tightBoundingRect(tm.elidedText.substring(0, tm.elidedText.length-1)).width +
-                                                          fm.tightBoundingRect(tm.text.charAt(tm.elidedText.length-1) + '..').width) < tm.elideWidth ?
-                                                             (tm.text.charAt(tm.elidedText.length-1) + '..')
-                                                                : '..');
-                                            return tm.elidedText.replace('…', '..');
-                                       // }
-                                       /* else
-                                        {
-                                            if(tm.elidedText.length < tm.text.length)
-                                                mainLineText = tm.elidedText.substring(0, tm.elidedText.length-1) +
-                                                        ((fm.tightBoundingRect(tm.elidedText.substring(0, tm.elidedText.length-1)).width +
-                                                          fm.tightBoundingRect(tm.text.charAt(tm.elidedText.length-1) + '..').width) < tm.elideWidth ?
-                                                             (tm.text.charAt(tm.elidedText.length-1) + '..')
-                                                                : '..');
-                                            else
-                                                mainLineText = tm.elidedText.replace('…', '..');
-                                            return "";
-                                        }*/
+                                        if(comboBoxTextMetric.elidedText.length < comboBoxTextMetric.text.length)
+                                            return checkElidedText(comboBoxFontMetric, comboBoxTextMetric);
+                                        return comboBoxTextMetric.elidedText.replace('…', '..');
                                     }
+                                    else
+                                    {
+                                        if(popup.visible)
+                                        {
+                                            if(comboBoxTextMetric.elidedText.length < comboBoxTextMetric.text.length)
+                                                mainLineText[index] = checkElidedText(comboBoxFontMetric, comboBoxTextMetric);
+                                            else
+                                                mainLineText[index] = comboBoxTextMetric.elidedText.replace('…', '..');
+                                        }
+                                        else
+                                        {
+                                            if(index === 0)
+                                                mainLineText[index] = comboBoxFontMetric.elidedText(getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index]),
+                                                                                                Text.ElideRight,
+                                                                                                (widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval),
+                                                                                                 Qt.TextShowMnemonic).replace('…', '..');
+                                            //else mainLineText[index] = "";
+                                        }
+                                        //console.log("mainLineText", mainLineText, popup.visible)
+                                        return "";
+                                    }
+                                }
                             }
+
                         }
                         Rectangle
                         {
-                            id: endpaddingRectangle
-                            width: 44 //endRowPadding
+                            id: endRowRectangle
                             height: parent.height
-                            color: "yellow"
+                            width: endRowPadding
+                            color: "transparent"
                         }
                     }
                 }
@@ -129,8 +147,92 @@ DapComboBoxForm
             highlighted: parent.highlightedIndex === index
         }
 
-    function getModelData(index, role)
+
+    function checkElidedText(fontMetric, textMetric)
     {
-        return model.get(index)[role];
+        return textMetric.elidedText.substring(0, textMetric.elidedText.length-1) +
+                ((fontMetric.tightBoundingRect(textMetric.elidedText.substring(0, textMetric.elidedText.length-1)).width +
+                  fontMetric.tightBoundingRect(textMetric.text.charAt(textMetric.elidedText.length-1) + '..').width) < textMetric.elideWidth ?
+                     (textMetric.text.charAt(textMetric.elidedText.length-1) + '..')
+                   : '..');
     }
+
+    function getModelData(rowIndex, modelRole)
+    {
+        return model.get(rowIndex)[modelRole];
+    }
+
+    function setModelDataWidth(rowIndex, fontMetric, rowWidth)
+    {
+        comboBoxTextRoleWidth = [0];
+        mainLineText = [""];
+        var neededWidth = 0;
+        for(var i = 0; i < comboBoxTextRole.length; i++)
+        {
+            mainLineText[i] = "";
+            comboBoxTextRoleWidth[i] = fontMetric.tightBoundingRect(getModelData(rowIndex, comboBoxTextRole[i])).width;
+            neededWidth += comboBoxTextRoleWidth[i];
+        }
+        neededWidth += roleInterval * (comboBoxTextRole.length - 1);
+        console.log("neededWidth", neededWidth, "rowWidth", rowWidth);
+        var oneIndex = 0;
+        if (neededWidth > rowWidth)
+        {
+            oneIndex = comboBoxTextRole.indexOf(mainLineRole);
+            if(oneIndex === -1)
+            {
+                oneIndex = comboBoxTextRole.indexOf("text");
+                if(oneIndex === -1)
+                {
+                    oneIndex = comboBoxTextRole.indexOf("name");
+                    if(oneIndex === -1)
+                        oneIndex = 0;
+                }
+            }
+            if(comboBoxTextRoleWidth[oneIndex] < neededWidth - rowWidth)
+            {
+                comboBoxTextRoleWidth[oneIndex] = rowWidth / (comboBoxTextRole.length);
+                var maxWidth = 0;
+                var maxIndex = 0;
+                while(neededWidth > rowWidth)
+                {
+                    maxWidth = comboBoxTextRoleWidth[0];
+                    maxIndex = 0;
+                    for(i = 0; i < comboBoxTextRoleWidth.length; i++)
+                    {
+                        if(maxWidth < comboBoxTextRoleWidth[i])
+                        {
+                            maxWidth = comboBoxTextRoleWidth[i];
+                            maxIndex = i;
+                        }
+                    }
+                    comboBoxTextRoleWidth[maxIndex] -= 10 * pt;
+                    neededWidth = 0;
+                    for(i = 0; i < comboBoxTextRoleWidth.length; i++)
+                        neededWidth += comboBoxTextRoleWidth[i];
+                }
+
+            }
+            return true;
+        }
+        if(neededWidth < rowWidth)
+        {
+            oneIndex = comboBoxTextRole.indexOf(mainLineRole);
+            if(oneIndex === -1)
+            {
+                oneIndex = comboBoxTextRole.indexOf("text");
+                if(oneIndex === -1)
+                {
+                    oneIndex = comboBoxTextRole.indexOf("name");
+                    if(oneIndex === -1)
+                        oneIndex = 0;
+                }
+            }
+            comboBoxTextRoleWidth[oneIndex] += rowWidth - neededWidth;
+            return true;
+        }
+        return false;
+
+    }
+
 }
