@@ -121,6 +121,14 @@ ComboBox
                         id: mainLineComboBoxText
                         height: dapComboBox.height
                         text: mainLineText[index]
+                        horizontalAlignment:
+                        {
+                            if(index === 0)
+                                return Text.AlignLeft;
+                            if(index === comboBoxTextRole.length - 1)
+                                return Text.AlignRight;
+                            return Text.AlignHCenter
+                        }
                         font: fontComboBox
                         color: popup.visible ? hilightColorTopText : normalColorTopText
                         verticalAlignment: Text.AlignVCenter

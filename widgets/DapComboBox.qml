@@ -63,6 +63,14 @@ DapComboBoxForm
                                 id: textDelegateComboBox
                                 font: fontComboBox
                                 color: hovered ? hilightColorText : normalColorText
+                                horizontalAlignment:
+                                {
+                                    if(index === 0)
+                                        return Text.AlignLeft;
+                                    if(index === comboBoxTextRole.length - 1)
+                                        return Text.AlignRight;
+                                    return Text.AlignHCenter
+                                }
                                 width: (rectTextComboBox.width - roleInterval * (comboBoxTextRole.length - 1)) / comboBoxTextRole.length
                                /* {
                                     if(index === 0)
