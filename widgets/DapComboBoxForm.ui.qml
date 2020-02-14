@@ -59,8 +59,17 @@ ComboBox
     property string colorTopNormalDropShadow
     ///@detalis colorDropShadow Unboxed shadow color in expanded state.
     property string colorDropShadow
+
     ///@detalis fontComboBox Font setting combobox.
-    property alias fontComboBox: dapComboBox.font
+    property var fontComboBox: []
+    ///@detalis colorTextComboBox Color text setting combobox: array [normalColorText, hilightColorText] for every role
+    property var colorTextComboBox: []
+    ///@detalis colorMainTextComboBox Color mainline text setting combobox: array [normalTopColorText, hilightTopColorText] for every role
+    property var colorMainTextComboBox: []
+    ///@detalis elideTextComboBox Elide setting combobox.
+    property var elideTextComboBox: [Text.ElideRight]
+    ///@detalis alignTextComboBox Align setting combobox.
+    property var alignTextComboBox: [Text.AlignLeft]
 
     ///@detalis comboBoxTextRole The model roles used for the ComboBox.
     property var comboBoxTextRole: ["text"]
@@ -114,6 +123,7 @@ ComboBox
 
              Row
             {
+                id: topComboBoxRow
                 width: widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval
                 height: mainRectangle.height
                 spacing: roleInterval
@@ -124,9 +134,21 @@ ComboBox
                     Text
                     {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: (popup.visible) ? mainRow[index] : mainLineText
-                        width: contentWidth
-                        color: "green"
+                        text: (popup.visible) ?
+                                  mainRow[index] :
+                                  mainLineText
+                        font: (fontComboBox.length > index) ?
+                                  fontComboBox[index] :
+                                  fontComboBox[0];
+                        width: popup.visible ?
+                                 (topComboBoxRow.width - roleInterval * (comboBoxTextRole.length - 1)) / comboBoxTextRole.length :
+                                   contentWidth
+                        color: popup.visible ?
+                                   colorMainTextComboBox[index][1] :
+                                   colorMainTextComboBox[index][0]
+                        horizontalAlignment: popup.visible ?
+                                                 alignTextComboBox[index] :
+                                                 Text.AlignLeft
                     }
                 }
             }
@@ -179,5 +201,6 @@ ComboBox
             verticalOffset: topEffect ? 9 * pt : 0
             samples: topEffect ? 13 * pt : 0
             color: topEffect ? (dapComboBox.popup.visible ? colorDropShadow : colorTopNormalDropShadow) : "#000000"
+            z: -1
         }
     }
