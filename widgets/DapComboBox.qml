@@ -3,7 +3,6 @@ import QtQuick.Controls 2.0
 
 DapComboBoxForm
 {
-
     delegate:
         ItemDelegate
         {
@@ -32,16 +31,14 @@ DapComboBoxForm
             contentItem:
                 Rectangle
                 {
-                    id: rectTextComboBox
+                    id: rectangleTextComboBox
 
                     anchors.fill: parent
                     anchors.topMargin: paddingTopItemDelegate
                     anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
                     anchors.rightMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
+                    border.width: 1
                     color: "transparent"
-                    width: (index !== currentIndex) ?
-                               widthPopupComboBoxNormal - 2*sidePaddingActive - endRowPadding :
-                               widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval - 2 * sidePaddingActive
 
                     FontMetrics
                     {
@@ -52,92 +49,47 @@ DapComboBoxForm
                     property int comboBoxCurrentIndex: currentIndex
                     Row
                     {
+                        id: textRow
+                        width: rectangleTextComboBox.width - ((index != currentIndex) ?
+                                                                  endRowPadding :
+                                                                  (indicatorWidth + indicatorLeftInterval)
+                                                              )
+                        height: rectangleTextComboBox.height
                         spacing: roleInterval
                         Repeater
                         {
+                            id: textRepeater
                             model: comboBoxTextRole.length
-                            Text
+                            DapText
                             {
-                                id: textDelegateComboBox
-                                font: fontComboBox
-                                color: hovered ? hilightColorText : normalColorText
-                                horizontalAlignment:
-                                {
-                                    if(index === 0)
-                                        return Text.AlignLeft;
-                                    if(index === comboBoxTextRole.length - 1)
-                                        return Text.AlignRight;
-                                    return Text.AlignHCenter;
-                                }
-                                width: (rectTextComboBox.width - roleInterval * (comboBoxTextRole.length - 1)) / comboBoxTextRole.length
-                                /*{
-                                        if(index === 0)
-                                            setModelDataWidth(rectTextComboBox.comboBoxIndex, comboBoxFontMetric, rectTextComboBox.width);
-                                         console.log("comboBoxIndex", rectTextComboBox.comboBoxIndex, "index", index, "comboBoxTextRole", comboBoxTextRole[index])
-                                         return comboBoxTextRoleWidth[index];
-                                }*/
-                                TextMetrics
-                                {
-                                    id: comboBoxTextMetric
-                                    font: fontComboBox
-                                    elide: Text.ElideRight
-                                    text: getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index])
-                                    elideWidth: textDelegateComboBox.width
-                                }
-                                /*Component.onCompleted:
-                                {
-                                    setModelDataWidth(rectTextComboBox.comboBoxIndex, comboBoxFontMetric, rectTextComboBox.width);
-                                    textDelegateComboBox.width = comboBoxTextRoleWidth[index];
-                                }*/
-                                text:
-                                {
-                                    if(rectTextComboBox.comboBoxIndex != rectTextComboBox.comboBoxCurrentIndex)
-                                    {
-                                        if(comboBoxTextMetric.elideWidth < comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.text).width)
-                                            return checkElidedText(comboBoxFontMetric, comboBoxTextMetric);
-                                        else if(comboBoxTextMetric.elideWidth === comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.text).width)
-                                            return comboBoxTextMetric.text;
-                                        else
-                                            return comboBoxTextMetric.elidedText.replace('…', '..');
-                                    }
-                                    else
-                                    {
-                                        if(popup.visible)
-                                        {
-                                            if(comboBoxTextMetric.elideWidth < comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.text).width)
-                                                mainLineText[index] = checkElidedText(comboBoxFontMetric, comboBoxTextMetric);
-                                            else
-                                            {
-                                                if(comboBoxTextMetric.elideWidth === comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.text).width)
-                                                    mainLineText[index] = comboBoxTextMetric.text;
-                                                else
-                                                    mainLineText[index] = comboBoxTextMetric.elidedText.replace('…', '..');
-                                            }
+                                id: textComboBoxDelegate
+                                width: (textRow.width - roleInterval * (comboBoxTextRole.length - 1)) / comboBoxTextRole.length
+                                enabled: false
+                                fontDapText: fontComboBox
+                                textColor: hovered ? hilightColorText : normalColorText
+                                fullText: getModelData(rectangleTextComboBox.comboBoxIndex, comboBoxTextRole[index])
 
-                                        }
-                                        else
-                                        {
-                                            if(index === 0)
-                                                mainLineText[index] = comboBoxFontMetric.elidedText(getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index]),
-                                                                                                                        Text.ElideRight,
-                                                                                                                        (widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval),
-                                                                                                                         Qt.TextShowMnemonic).replace('…', '..');
-                                        }
-                                        console.log("mainLineText[index]", "index", mainLineText[index], index)
-                                            return "";
+                                Component.onCompleted:
+                                {
+                                   if(rectangleTextComboBox.comboBoxIndex == rectangleTextComboBox.comboBoxCurrentIndex)
+                                   {
+                                       var tmp = mainRow;
+                                       tmp[index] = elText;
+                                       mainRow = tmp;
 
-                                    }
+                                       if(index == 0)
+                                           mainLineText = comboBoxFontMetric.elidedText(fullText, Text.ElideRight, rectangleTextComboBox.width, Qt.TextShowMnemonic);
+                                   }
                                 }
+
                             }
+                        }
 
-                        }
-                        Rectangle
-                        {
-                            id: endRowRectangle
-                            height: parent.height
-                            width: endRowPadding
-                            color: "transparent"
-                        }
+                    }
+                    onComboBoxCurrentIndexChanged:
+                    {
+                        mainLineText = comboBoxFontMetric.elidedText(getModelData(currentIndex, comboBoxTextRole[0]), Text.ElideRight, rectangleTextComboBox.width, Qt.TextShowMnemonic);
+                        console.log("mainLineText", mainLineText)
                     }
                 }
 
