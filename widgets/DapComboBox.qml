@@ -31,20 +31,14 @@ DapComboBoxForm
             contentItem:
                 Rectangle
                 {
-                    id: rectTextComboBox
-
+                    id: rectangleTextComboBox
                     anchors.fill: parent
                     anchors.topMargin: paddingTopItemDelegate
                     anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
                     anchors.rightMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
+                    border.width: 1
                     color: "transparent"
-                    width:
-                    {
-                        (index !== currentIndex) ?
-                               widthPopupComboBoxNormal - 2*sidePaddingActive - endRowPadding :
-                               widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval - 2 * sidePaddingActive
-                        console.log(widthPopupComboBoxNormal - 2*sidePaddingActive - endRowPadding ,  widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval - 2 * sidePaddingActive)
-                    }
+
                     FontMetrics
                     {
                         id: comboBoxFontMetric
@@ -54,80 +48,48 @@ DapComboBoxForm
                     property int comboBoxCurrentIndex: currentIndex
                     Row
                     {
+                        id: textRow
+                        width: rectangleTextComboBox.width - ((index != currentIndex) ?
+                                                                  endRowPadding :
+                                                                  (indicatorWidth + indicatorLeftInterval)
+                                                              )
+                        height: rectangleTextComboBox.height
                         spacing: roleInterval
                         Repeater
                         {
+                            id: textRepeater
                             model: comboBoxTextRole.length
-                            Text
+                            DapText
                             {
-                                id: textDelegateComboBox
-                                font: fontComboBox
-                                color: hovered ? hilightColorText : normalColorText
-                                horizontalAlignment:
-                                {
-                                    if(index === 0)
-                                        return Text.AlignLeft;
-                                    if(index === comboBoxTextRole.length - 1)
-                                        return Text.AlignRight;
-                                    return Text.AlignHCenter
-                                }
-                                width: (rectTextComboBox.width - roleInterval * (comboBoxTextRole.length - 1)) / comboBoxTextRole.length
-                               /* {
-                                    if(index === 0)
-                                        setModelDataWidth(rectTextComboBox.comboBoxIndex, comboBoxFontMetric, rectTextComboBox.width);
-                                    console.log("comboBoxIndex", rectTextComboBox.comboBoxIndex, "index", index, "comboBoxTextRole", comboBoxTextRole[index])
-                                    return comboBoxTextRoleWidth[index];
-                                }*/
-                                TextMetrics
-                                {
-                                    id: comboBoxTextMetric
-                                    font: fontComboBox
-                                    elide: Text.ElideRight
-                                    text: getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index])
-                                    elideWidth: textDelegateComboBox.width
+                                id: textComboBoxDelegate
+                                width: (textRow.width - roleInterval * (comboBoxTextRole.length - 1)) / comboBoxTextRole.length
+                                enabled: false
+                                fontDapText: fontComboBox
+                                textColor: hovered ? hilightColorText : normalColorText
+                                fullText: getModelData(rectangleTextComboBox.comboBoxIndex, comboBoxTextRole[index])
 
-                                }
-                                text:
+                                Component.onCompleted:
                                 {
-                                    console.log(textDelegateComboBox.width)
-                                    if(rectTextComboBox.comboBoxIndex != rectTextComboBox.comboBoxCurrentIndex)
-                                    {
-                                        if(comboBoxTextMetric.elidedText.length < comboBoxTextMetric.text.length)
-                                            return checkElidedText(comboBoxFontMetric, comboBoxTextMetric);
-                                        return comboBoxTextMetric.elidedText.replace('…', '..');
-                                    }
-                                    else
-                                    {
-                                        if(popup.visible)
-                                        {
-                                            if(comboBoxTextMetric.elidedText.length < comboBoxTextMetric.text.length)
-                                                mainLineText[index] = checkElidedText(comboBoxFontMetric, comboBoxTextMetric);
-                                            else
-                                                mainLineText[index] = comboBoxTextMetric.elidedText.replace('…', '..');
-                                        }
-                                        else
-                                        {
-                                            if(index === 0)
-                                                mainLineText[index] = comboBoxFontMetric.elidedText(getModelData(rectTextComboBox.comboBoxIndex, comboBoxTextRole[index]),
-                                                                                                Text.ElideRight,
-                                                                                                (widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval),
-                                                                                                 Qt.TextShowMnemonic).replace('…', '..');
-                                            //else mainLineText[index] = "";
-                                        }
-                                        //console.log("mainLineText", mainLineText, popup.visible)
-                                        return "";
-                                    }
+                                   if(rectangleTextComboBox.comboBoxIndex == rectangleTextComboBox.comboBoxCurrentIndex)
+                                   {
+                                       var tmp = mainRow;
+                                       tmp[index] = elText;
+                                       mainRow = tmp;
+
+                                       if(index == 0)
+                                           mainLineText = comboBoxFontMetric.elidedText(fullText, Text.ElideRight, rectangleTextComboBox.width, Qt.TextShowMnemonic);
+                                   }
                                 }
+
                             }
 
                         }
-                        Rectangle
-                        {
-                            id: endRowRectangle
-                            height: parent.height
-                            width: endRowPadding
-                            color: "transparent"
-                        }
+
+                    }
+                    onComboBoxCurrentIndexChanged:
+                    {
+                        mainLineText = comboBoxFontMetric.elidedText(getModelData(currentIndex, comboBoxTextRole[0]), Text.ElideRight, rectangleTextComboBox.width, Qt.TextShowMnemonic);
+                        console.log("mainLineText", mainLineText)
                     }
                 }
 
@@ -219,7 +181,6 @@ DapComboBoxForm
                     for(i = 0; i < comboBoxTextRoleWidth.length; i++)
                         neededWidth += comboBoxTextRoleWidth[i];
                 }
-
             }
             return true;
         }
@@ -240,7 +201,6 @@ DapComboBoxForm
             return true;
         }
         return false;
-
     }
 
 }

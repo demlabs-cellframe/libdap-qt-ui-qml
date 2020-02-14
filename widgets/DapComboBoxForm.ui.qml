@@ -61,19 +61,21 @@ ComboBox
     property string colorDropShadow
     ///@detalis fontComboBox Font setting combobox.
     property alias fontComboBox: dapComboBox.font
-    ///@detalis mainLineText Text without unneccesary part.
-    property var mainLineText: []
 
     ///@detalis comboBoxTextRole The model roles used for the ComboBox.
-    property var comboBoxTextRole: ["name"]
+    property var comboBoxTextRole: ["text"]
     ///@detalis comboBoxTextRoleWidth The model roles width used for the ComboBox.
     property var comboBoxTextRoleWidth: [100]
     ///@detalis roleInterval The width between text of model roles used for the ComboBox.
-    property int roleInterval: 1
+    property int roleInterval: 10
     ///@detalis endRowPadding The width of padding at the end of one row at ComboBox where it is need.
-    property int endRowPadding: 0
-    ///@detalis mainLineRole The model role for the main line of cloded ComboBox.
-    property string mainLineRole: "name"
+    property int endRowPadding: 10
+
+    ///@detalis mainRow The model role for the main line of cloded ComboBox.
+    property var mainRow: [""]
+    //@detalis mainLineText Text without unneccesary part.
+    property string mainLineText
+
 
     width: popup.visible ? widthPopupComboBoxActive : widthPopupComboBoxNormal
     height: popup.visible ? heightComboBoxActive : heightComboBoxNormal
@@ -104,38 +106,32 @@ ComboBox
     contentItem:
         Rectangle
         {
+            id: mainRectangle
             anchors.fill: parent
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
-            width: widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval
-            color: "transparent"
-            Row
+             color: "transparent"
+
+             Row
             {
+                width: widthPopupComboBoxNormal - indicatorWidth - indicatorLeftInterval
+                height: mainRectangle.height
                 spacing: roleInterval
                 Repeater
                 {
-                    id: mainLineRepeater
-                    model: popup.visible ? comboBoxTextRole.length : 1
+                    id: textCurrentRepeater
+                    model: (popup.visible) ? comboBoxTextRole.length : 1
                     Text
                     {
-                        id: mainLineComboBoxText
-                        height: dapComboBox.height
-                        text: mainLineText[index]
-                        horizontalAlignment:
-                        {
-                            if(index === 0)
-                                return Text.AlignLeft;
-                            if(index === comboBoxTextRole.length - 1)
-                                return Text.AlignRight;
-                            return Text.AlignHCenter
-                        }
-                        font: fontComboBox
-                        color: popup.visible ? hilightColorTopText : normalColorTopText
-                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: (popup.visible) ? mainRow[index] : mainLineText
+                        width: contentWidth
+                        color: "green"
                     }
                 }
             }
         }
+
 
     //Customize drop-down list with shadow effect
     popup: 
