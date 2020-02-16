@@ -61,6 +61,7 @@ DapComboBoxForm
                         {
                             id: textRepeater
                             model: comboBoxTextRole.length
+
                             DapText
                             {
                                 id: textComboBoxDelegate
@@ -96,7 +97,6 @@ DapComboBoxForm
                                             mainLineText = comboBoxFontMetric.elidedText(fullText, Text.ElideRight, rectangleTextComboBox.width, Qt.TextShowMnemonic);
                                         }
                                     }
-
                                 }
 
                             }
@@ -114,6 +114,7 @@ DapComboBoxForm
                     {
                         if(rectangleTextComboBox.comboBoxCurrentIndex !== -1)
                             updateMainRow(comboBoxFontMetric, rectangleTextComboBox.comboBoxIndex, rectangleTextComboBox.comboBoxCurrentIndex, textRow.elTextArray, rectangleTextComboBox.width);
+
                     }
                 }
 
@@ -168,5 +169,4 @@ DapComboBoxForm
         }
     }
 
-    /////////////////
 }
