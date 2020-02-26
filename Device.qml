@@ -5,12 +5,6 @@ import QtQuick.Window 2.0
 Item {
     id: dapDevice
 
-    Component.onCompleted:
-    {
-        console.log(Screen.pixelDensity)
-        console.log(Screen.pixelDensity * 25.4)
-    }
-
     property string device: dp()
     property int ppi: Screen.pixelDensity*25.4
 
