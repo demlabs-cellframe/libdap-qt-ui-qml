@@ -28,5 +28,11 @@
         <file>widgets/DapMessageBox.qml</file>
         <file>widgets/DapMessageBoxForm.ui.qml</file>
         <file>DapFont.qml</file>
+        <file>widgets/DapAbstractComboBox.qml</file>
+        <file>widgets/DapAbstractComboBoxForm.ui.qml</file>
+        <file>widgets/DapSimpleComboBox.qml</file>
+        <file>widgets/DapSimpleComboBoxForm.ui.qml</file>
+        <file>widgets/DapOneRoleComboBox.qml</file>
+        <file>widgets/DapOneRoleComboBoxForm.ui.qml</file>
     </qresource>
 </RCC>
