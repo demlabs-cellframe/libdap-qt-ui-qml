@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.4
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.0
@@ -65,10 +65,32 @@ ComboBox
     property var textFont
     ///@details mainLineText Text of the main line without unneccesary part.
     property string mainLineText
+    ///@details isDefaultNeedToAppend Sign to add default data to the beginning of model
+    property bool isDefaultNeedToAppend: false
+    ///@details defaultMainLineText External value which is added to comboBox model
+    property string defaultMainLineText
+    ///@details dapComboBoxTextMetric ID of comboBox Text Metric
+    property alias dapComboBoxTextMetric: comboBoxTextMetric
+    ///@details dapComboBoxFontMetric ID of comboBox Font Metric
+    property alias dapComboBoxFontMetric: comboBoxFontMetric
 
     width: popup.visible ? widthPopupComboBoxActive : widthPopupComboBoxNormal
     height: popup.visible ? heightComboBoxActive : heightComboBoxNormal
     anchors.verticalCenter: parent.verticalCenter
+
+    //To do elide
+    TextMetrics
+    {
+        id: comboBoxTextMetric
+        font: textFont
+        elide: Text.ElideRight
+    }
+    // To check elide
+    FontMetrics
+    {
+        id: comboBoxFontMetric
+        font: textFont
+    }
 
     //Icon icon near the text (arrow)
     indicator:

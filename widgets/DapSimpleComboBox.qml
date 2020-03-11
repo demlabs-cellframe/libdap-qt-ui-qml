@@ -3,32 +3,10 @@ import QtQuick.Controls 2.0
 
 DapSimpleComboBoxForm
 {
-    //To do elide
-    TextMetrics
-    {
-        id: comboBoxTextMetric
-        font: textFont
-        elide: Text.ElideRight
-    }
-    // To check elide
-    FontMetrics
-    {
-        id: comboBoxFontMetric
-        font: textFont
-    }
-
     Component.onCompleted:
     {
-        comboBoxTextMetric.text = textAt(currentIndex);
-        comboBoxTextMetric.elideWidth = widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval);
-        if(comboBoxTextMetric.elideWidth < comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.text).width)
-            mainLineText = comboBoxTextMetric.elidedText.substring(0, comboBoxTextMetric.elidedText.length - 1) +
-                    ((comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.elidedText.substring(0, comboBoxTextMetric.elidedText.length - 1)).width +
-                      comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.text.charAt(comboBoxTextMetric.elidedText.length - 1) + '..').width) < comboBoxTextMetric.elideWidth ?
-                         (comboBoxTextMetric.text.charAt(comboBoxTextMetric.elidedText.length - 1) + '..') :
-                       '..');
-        else
-            mainLineText = comboBoxTextMetric.elidedText.replace('…', '..');
+        addDefaultValueToModel();
+        checkElide(currentIndex);
     }
 
     delegate:
@@ -77,16 +55,7 @@ DapSimpleComboBoxForm
 
     onCurrentIndexChanged:
     {
-        comboBoxTextMetric.text = textAt(currentIndex);
-        comboBoxTextMetric.elideWidth = widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval);
-        if(comboBoxTextMetric.elideWidth < comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.text).width)
-            mainLineText = comboBoxTextMetric.elidedText.substring(0, comboBoxTextMetric.elidedText.length - 1) +
-                    ((comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.elidedText.substring(0, comboBoxTextMetric.elidedText.length - 1)).width +
-                      comboBoxFontMetric.tightBoundingRect(comboBoxTextMetric.text.charAt(comboBoxTextMetric.elidedText.length - 1) + '..').width) < comboBoxTextMetric.elideWidth ?
-                         (comboBoxTextMetric.text.charAt(comboBoxTextMetric.elidedText.length - 1) + '..') :
-                       '..');
-        else
-            mainLineText = comboBoxTextMetric.elidedText.replace('…', '..');
+        checkElide(currentIndex);
     }
 
 }

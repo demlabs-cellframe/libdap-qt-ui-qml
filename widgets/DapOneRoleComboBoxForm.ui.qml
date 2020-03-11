@@ -2,8 +2,6 @@ import QtQuick 2.4
 
 DapSimpleComboBox
 {
-    ///@details External value which is added to comboBox model
-    property string defaultMainLineText
     ///@details textRole One role of comboBox model with more than one roles
     property string oneTextRole
 

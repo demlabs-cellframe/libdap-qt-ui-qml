@@ -3,28 +3,11 @@ import QtQuick.Controls 2.0
 
 DapAbstractComboBoxForm
 {
+
     delegate:
         ItemDelegate
         {
            //Setting by children
-            /*width: parent.width
-
-            //Adjusting the height of the line, taking into account that the second element from the end may be the last
-            //height: getItemHeight(index)
-
-            //contentItem is setting by children
-
-            //Indent from the bottom edge or the next line that will not stand out when you hover over the mouse
-            background:
-                Rectangle
-                {
-                    anchors.fill: parent
-                    anchors.bottomMargin: getBackgroundSize(index)
-                    color: hovered ? hilightColor : normalColor
-                }
-
-
-            highlighted: parent.highlightedIndex === index*/
         }
 
     //For using by children to set item height
@@ -61,11 +44,41 @@ DapAbstractComboBoxForm
         return intervalListElement;
     }
 
-
     //For using by children to get modelData from model with more than one roles
     function getModelData(rowIndex, modelRole)
     {
         return model.get(rowIndex)[modelRole];
+    }
+
+    //For using by children to add string from defaultMainLineText to the comboBox model
+    function addDefaultValueToModel()
+    {
+        if(isDefaultNeedToAppend && model.get(0, oneTextRole) !== defaultMainLineText)
+        {
+            if(model.get(0, oneTextRole) !== defaultMainLineText)
+            {
+                if(oneTextRole === "name")
+                    model.insert(0, {name: defaultMainLineText});
+                else if(oneTextRole === "text")
+                    model.insert(0, {text: defaultMainLineText});
+                currentIndex = 0;
+            }
+        }
+    }
+
+    //For using by children to check ability of adding one more letter to elided text
+    function checkElide(currentIndex)
+    {
+        dapComboBoxTextMetric.text = textAt(currentIndex);
+        dapComboBoxTextMetric.elideWidth = widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval);
+        if(dapComboBoxTextMetric.elideWidth < dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.text).width)
+            mainLineText = dapComboBoxTextMetric.elidedText.substring(0, dapComboBoxTextMetric.elidedText.length - 1) +
+                    ((dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.elidedText.substring(0, dapComboBoxTextMetric.elidedText.length - 1)).width +
+                      dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.text.charAt(dapComboBoxTextMetric.elidedText.length - 1) + '..').width) < dapComboBoxTextMetric.elideWidth ?
+                         (dapComboBoxTextMetric.text.charAt(dapComboBoxTextMetric.elidedText.length - 1) + '..') :
+                       '..');
+        else
+            mainLineText = dapComboBoxTextMetric.elidedText.replace('…', '..');
     }
 
 }
