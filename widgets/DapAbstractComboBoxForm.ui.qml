@@ -69,6 +69,8 @@ ComboBox
     property bool isDefaultNeedToAppend: false
     ///@details defaultMainLineText External value which is added to comboBox model
     property string defaultMainLineText
+    ///@detalis endRowPadding The width of padding at the end of one row at ComboBox where it is need.
+    property int endRowPadding
     ///@details dapComboBoxTextMetric ID of comboBox Text Metric
     property alias dapComboBoxTextMetric: comboBoxTextMetric
     ///@details dapComboBoxFontMetric ID of comboBox Font Metric
