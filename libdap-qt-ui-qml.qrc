@@ -34,5 +34,7 @@
         <file>widgets/DapSimpleComboBoxForm.ui.qml</file>
         <file>widgets/DapOneRoleComboBox.qml</file>
         <file>widgets/DapOneRoleComboBoxForm.ui.qml</file>
+        <file>widgets/DapBusyIndicator.qml</file>
+        <file>widgets/DapBusyIndicatorForm.ui.qml</file>
     </qresource>
 </RCC>
