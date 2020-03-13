@@ -6,15 +6,17 @@ DapAbstractComboBox
     property string firstTextRole
     ///@details secondTextRole Second role of comboBox model with more than one roles
     property string secondTextRole
-    ///@details isFirstElide Sign which role will elided
-    property bool isFirstElide
+    ///@details isFirstElided Sign which role will elided
+    property bool isFirstElided: true
     ///@details isBothAtMainLine Sign both role will place at mainLine of closed comboBox or only first role
-    property bool isBothAtMainLine
+    property bool isBothAtMainLine: false
     ///@detalis roleInterval The width between text of model roles used for the ComboBox.
     property int roleInterval
 
     ///@details secondTextFont Font of second role of comboBox
     property var secondTextFont
+    ///@details mainLineSecondText Text of second role of comboBox main line
+    property string mainLineSecondText
     ///@details normalColorSecondText Text color of second role in normal state.
     property string normalColorSecondText
     ///@details hilightColorSecondText Text color of second role in selected state.
@@ -47,42 +49,28 @@ DapAbstractComboBox
                 Repeater
                 {
                     id: textCurrentRepeater
-                    model: (popup.visible) ? 2 : ((isFirstInMainLine && isSecondInMainLine) ? 2 : 1)
+                    model: (popup.visible) ? 2 : ((isBothAtMainLine) ? 2 : 1)
                     Text
                     {
                         anchors.verticalCenter: parent.verticalCenter
 
                         text: (popup.visible) ?
-                                  mainText[index] :
-                                  (isBothAtMainLine)
+                                  (index === 0 ? mainLineText : mainLineSecondText) :
+                                  (isBothAtMainLine ? (index === 0 ? mainLineText : mainLineSecondText) : mainLineText)
                         font: (popup.visible) ?
-                            ((index === count) ?
-                                 (index === 0 ? )
-                             ) :
-                                  fontComboBox[0];
-                        width: popup.visible ?
-                                 (topComboBoxRow.width - roleInterval * (comboBoxTextRole.length - 1)) / comboBoxTextRole.length :
-                                   contentWidth
-                        color: popup.visible ?
-                                   colorMainTextComboBox[index][1] :
-                                   colorMainTextComboBox[index][0]
+                                  (index === 0 ? textFont : secondTextFont) :
+                                  (isBothAtMainLine ? (index === 0 ? textFont : secondTextFont) : textFont)
+                        width: (popup.visible) ?
+                                   ((topComboBoxRow.width - roleInterval) / count) :
+                                   (isBothAtMainLine ? ((topComboBoxRow.width - roleInterval) / count) : contentWidth)
+                        color: (popup.visible) ?
+                                   (index === 0 ? hilightColorTopText : hilightColorTopSecondText) :
+                                   (isBothAtMainLine ? (index === 0 ? normalColorTopText : normalColorTopSecondText) : normalColorTopText)
                         horizontalAlignment: popup.visible ?
-                                                 alignTextComboBox[index] :
-                                                 Text.AlignLeft
+                                                 (index === 0 ? Text.AlignLeft : Text.AlignRight) :
+                                                 (isBothAtMainLine ? (index === 0 ? Text.AlignLeft : Text.AlignRight) : Text.AlignLeft)
                     }
                 }
             }
-            /*Text
-            {
-                id: cmbBxMainItemText
-                width: widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval)
-                anchors.verticalCenter: parent.verticalCenter
-                enabled: false
-                text: mainLineText
-                font: textFont
-                color: popup.visible ? hilightColorTopText : normalColorTopText
-                horizontalAlignment: Text.AlignLeft
-                clip: true
-            }*/
         }
 }
