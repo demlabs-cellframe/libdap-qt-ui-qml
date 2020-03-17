@@ -2,10 +2,11 @@ import QtQuick 2.4
 
 DapSimpleComboBox
 {
-    ///@details textRole One role of comboBox model with more than one roles
-    property string oneTextRole
 
     id: dapOneRoleComboBox
+
+    ///@details textRole One role of comboBox model with more than one roles
+    property string oneTextRole: "text"
 
     //Text item
     contentItem:

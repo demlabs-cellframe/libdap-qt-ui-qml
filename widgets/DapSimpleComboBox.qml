@@ -3,11 +3,6 @@ import QtQuick.Controls 2.0
 
 DapSimpleComboBoxForm
 {
-    Component.onCompleted:
-    {
-        addDefaultValueToModel();
-        checkElide(currentIndex);
-    }
 
     delegate:
         ItemDelegate
@@ -55,7 +50,7 @@ DapSimpleComboBoxForm
 
     onCurrentIndexChanged:
     {
-        checkElide(currentIndex);
+        mainLineText = checkElide(currentIndex);
     }
 
 }

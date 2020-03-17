@@ -121,6 +121,7 @@ ComboBox
     popup:
         Popup
         {
+            id: dapComboboxPopup
             y: parent.height - 1
             width: parent.width
             padding: 0

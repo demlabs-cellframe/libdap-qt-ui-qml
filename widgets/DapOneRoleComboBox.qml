@@ -3,6 +3,14 @@ import QtQuick.Controls 2.0
 
 DapOneRoleComboBoxForm
 {
+    Component.onCompleted:
+    {
+        currentIndex = -1;
+        addDefaultValueToModel(oneTextRole);
+        currentIndex = 0;
+        mainLineText = checkElide(currentIndex);
+    }
+
     delegate:
         ItemDelegate
         {

@@ -51,18 +51,12 @@ DapAbstractComboBoxForm
     }
 
     //For using by children to add string from defaultMainLineText to the comboBox model
-    function addDefaultValueToModel()
+    function addDefaultValueToModel(oneTextRole)
     {
         if(isDefaultNeedToAppend && model.get(0, oneTextRole) !== defaultMainLineText)
         {
-            if(model.get(0, oneTextRole) !== defaultMainLineText)
-            {
-                if(oneTextRole === "name")
-                    model.insert(0, {name: defaultMainLineText});
-                else if(oneTextRole === "text")
-                    model.insert(0, {text: defaultMainLineText});
-                currentIndex = 0;
-            }
+            model.insert(0, {});
+            model.setProperty(0, oneTextRole, defaultMainLineText)
         }
     }
 
@@ -72,13 +66,46 @@ DapAbstractComboBoxForm
         dapComboBoxTextMetric.text = textAt(currentIndex);
         dapComboBoxTextMetric.elideWidth = widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval);
         if(dapComboBoxTextMetric.elideWidth < dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.text).width)
-            mainLineText = dapComboBoxTextMetric.elidedText.substring(0, dapComboBoxTextMetric.elidedText.length - 1) +
+            return dapComboBoxTextMetric.elidedText.substring(0, dapComboBoxTextMetric.elidedText.length - 1) +
                     ((dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.elidedText.substring(0, dapComboBoxTextMetric.elidedText.length - 1)).width +
                       dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.text.charAt(dapComboBoxTextMetric.elidedText.length - 1) + '..').width) < dapComboBoxTextMetric.elideWidth ?
                          (dapComboBoxTextMetric.text.charAt(dapComboBoxTextMetric.elidedText.length - 1) + '..') :
                        '..');
         else
-            mainLineText = dapComboBoxTextMetric.elidedText.replace('…', '..');
+            return dapComboBoxTextMetric.elidedText.replace('…', '..');
+    }
+
+    //For using by children to check ability of adding one more letter to elided text by text and mode
+    function checkElideRole(text1, width1, mode)
+    {
+        dapComboBoxTextMetric.text = text1;
+        dapComboBoxTextMetric.elideWidth = width1;
+        dapComboBoxTextMetric.elide = mode;
+        var indexOfChar = dapComboBoxTextMetric.elidedText.indexOf('…');
+        if(width1 < dapComboBoxFontMetric.tightBoundingRect(text1).width)
+        {
+            if(mode === Text.ElideRight)
+                return dapComboBoxTextMetric.elidedText.substring(0, dapComboBoxTextMetric.elidedText.length - 1) +
+                        ((dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.elidedText.substring(0, dapComboBoxTextMetric.elidedText.length - 1)).width +
+                          dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.text.charAt(dapComboBoxTextMetric.elidedText.length - 1) + '..').width) < dapComboBoxTextMetric.elideWidth ?
+                             (dapComboBoxTextMetric.text.charAt(dapComboBoxTextMetric.elidedText.length - 1) + '..') :
+                           '..');
+
+            if(mode === Text.ElideMiddle)
+            {
+                if(dapComboBoxTextMetric.elidedText.indexOf('…') !== -1)
+                    return dapComboBoxTextMetric.elidedText.substring(0, indexOfChar) +
+                            ((dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.elidedText.substring(0, indexOfChar)).width +
+                              dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.text.charAt(indexOfChar) + '..').width +
+                              dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.elidedText.substring(indexOfChar + 1, dapComboBoxTextMetric.elidedText.length)).width) < dapComboBoxTextMetric.elideWidth ?
+                                 (dapComboBoxTextMetric.text.charAt(indexOfChar) + '..'):
+                                 '..') +
+                            dapComboBoxTextMetric.elidedText.substring(indexOfChar + 1, dapComboBoxTextMetric.elidedText.length);
+
+            }
+        }
+        else
+            return dapComboBoxTextMetric.elidedText.replace('…', '..');
     }
 
 }

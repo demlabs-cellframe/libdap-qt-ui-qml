@@ -3,11 +3,29 @@ import QtQuick.Controls 2.0
 
 DapTwoRoleComboBoxForm
 {
+    Component.onCompleted:
+    {
+        //It's needed to don't update comboBox while all data will not appended
+        currentIndex = -1;
+        addDefaultValueToModel(firstTextRole);
+        model.setProperty(0, secondTextRole, " ");
+        //Set currentIndex and update comboBox
+        currentIndex = 0;
+    }
+
+    //For set different number of roles to mainLine of opened and closed comboBox
+    popup.onVisibleChanged:
+    {
+        checkPopupVisible(currentIndex);
+    }
+
     delegate:
         ItemDelegate
         {
+            id: comboBoxDelegate
             width: parent.width
             height: getItemHeight(index)
+            property int rowWidth: textRow.width
 
             contentItem:
                     Rectangle
@@ -25,7 +43,7 @@ DapTwoRoleComboBoxForm
                         Row
                         {
                             id: textRow
-                            width: rectangleTextComboBox.width - ((index != currentIndex) ?
+                            width: widthPopupComboBoxNormal - ((index != currentIndex) ?
                                                                       endRowPadding :
                                                                       (indicatorWidth + indicatorLeftInterval)
                                                                   )
@@ -36,7 +54,6 @@ DapTwoRoleComboBoxForm
                             {
                                 id: textRepeater
                                 model: 2
-
                                 DapText
                                 {
                                     id: textComboBoxDelegate
@@ -47,32 +64,25 @@ DapTwoRoleComboBoxForm
                                                    (index === 0 ? hilightColorText : hilightColorSecondText) :
                                                    (index === 0 ? normalColorText : normalColorSecondText)
                                     fullText: getModelData(rectangleTextComboBox.comboBoxIndex, (index === 0 ? firstTextRole : secondTextRole))
-                                    textElide: index === 0 ?
-                                                   (isFirstElided ? Text.ElideRight : Text.ElideNone) :
-                                                   (isFirstElided ? Text.ElideNone : Text.ElideMiddle)
+                                    textElide: index === 0 ? Text.ElideRight : Text.ElideMiddle
                                     horizontalAlignment: index === 0 ? Text.AlignLeft : Text.AlignRight
-
                                     Component.onCompleted:
                                     {
-                                        updateMainRow(dapComboBoxFontMetric, rectangleTextComboBox.comboBoxIndex, rectangleTextComboBox.comboBoxCurrentIndex, textComboBoxDelegate.width)
+                                        if(rectangleTextComboBox.comboBoxIndex === rectangleTextComboBox.comboBoxCurrentIndex)
+                                        {
+                                            if(index === 0)
+                                                mainLineText = elText;
+                                            else
+                                                mainLineSecondText = elText;
+                                        }
                                     }
-
                                 }
-
                             }
-
-                        }
-                        Component.onCompleted:
-                        {
-                            if(rectangleTextComboBox.comboBoxCurrentIndex !== -1)
-                                updateMainRow(dapComboBoxFontMetric, rectangleTextComboBox.comboBoxIndex, rectangleTextComboBox.comboBoxCurrentIndex, (textRow.width - roleInterval) / 2);
-
                         }
                         onComboBoxCurrentIndexChanged:
                         {
                             if(rectangleTextComboBox.comboBoxCurrentIndex !== -1)
-                                updateMainRow(dapComboBoxFontMetric, rectangleTextComboBox.comboBoxIndex, rectangleTextComboBox.comboBoxCurrentIndex, (textRow.width - roleInterval) / 2);
-
+                                checkPopupVisible(rectangleTextComboBox.comboBoxCurrentIndex);
                         }
 
                     }
@@ -87,18 +97,27 @@ DapTwoRoleComboBoxForm
             highlighted: DapAbstractComboBox.highlightedIndex === index
         }
 
-    //For update text at mainLine of comboBox
-    function updateMainRow(fm, cbIndex, cbCurrentIndex, width)
+
+    //For update text at mainLine of comboBox with popup visibility
+    function checkPopupVisible(currentIndex)
     {
-        if(cbIndex === cbCurrentIndex)
-        {
-            dapComboBoxTextMetric.font = textFont
-            mainLineText = fm.elidedText(getModelData(cbCurrentIndex, firstTextRole), (isFirstElided ? Text.ElideRight : Text.ElideNone), width, Qt.TextShowMnemonic);
+        var mainWidth;
+        //Set needed text width
+        if(popup.visible)
+            mainWidth = (widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval) - roleInterval) / 2;
+        else if(!popup.visible)
+            mainWidth = (isBothAtMainLine ?
+                             ((widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval) - roleInterval) / 2) :
+                             widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval));
+        //Set font to calculate elideText for mainLineText
+        dapComboBoxFontMetric.font = textFont;
+        dapComboBoxTextMetric.font = textFont;
+        mainLineText = checkElideRole(getModelData(currentIndex, firstTextRole), mainWidth, Text.ElideRight);
 
-            dapComboBoxTextMetric.font = secondTextFont
-            mainLineSecondText = fm.elidedText(getModelData(cbCurrentIndex, secondTextRole), (isFirstElided ? Text.ElideNone : Text.ElideMiddle), width, Qt.TextShowMnemonic);
-
-        }
+        //Set font to calculate elideText for mainLineSecondText
+        dapComboBoxFontMetric.font = secondTextFont;
+        dapComboBoxTextMetric.font = secondTextFont;
+        mainLineSecondText = checkElideRole(getModelData(currentIndex, secondTextRole), mainWidth, Text.ElideMiddle);
 
     }
 

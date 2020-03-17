@@ -6,26 +6,23 @@ DapAbstractComboBox
     property string firstTextRole
     ///@details secondTextRole Second role of comboBox model with more than one roles
     property string secondTextRole
-    ///@details isFirstElided Sign which role will elided
-    property bool isFirstElided: true
     ///@details isBothAtMainLine Sign both role will place at mainLine of closed comboBox or only first role
     property bool isBothAtMainLine: false
     ///@detalis roleInterval The width between text of model roles used for the ComboBox.
-    property int roleInterval
+    property int roleInterval: 5
 
     ///@details secondTextFont Font of second role of comboBox
-    property var secondTextFont
+    property var secondTextFont: textFont
     ///@details mainLineSecondText Text of second role of comboBox main line
     property string mainLineSecondText
     ///@details normalColorSecondText Text color of second role in normal state.
-    property string normalColorSecondText
+    property string normalColorSecondText: normalColorText
     ///@details hilightColorSecondText Text color of second role in selected state.
-    property string hilightColorSecondText
+    property string hilightColorSecondText: hilightColorText
     ///@details normalColorTopSecondText Text color of second role in the main line in normal state.
-    property string normalColorTopSecondText
+    property string normalColorTopSecondText: normalColorTopText
     ///@details hilightColorTopSecondText Text color of second role in the main line in active state.
-    property string hilightColorTopSecondText
-
+    property string hilightColorTopSecondText: hilightColorTopText
 
     id: dapTwoRoleComboBox
 
@@ -52,17 +49,18 @@ DapAbstractComboBox
                     model: (popup.visible) ? 2 : ((isBothAtMainLine) ? 2 : 1)
                     Text
                     {
+                        id: cmbBxMainItemText
                         anchors.verticalCenter: parent.verticalCenter
-
+                        enabled: false
                         text: (popup.visible) ?
                                   (index === 0 ? mainLineText : mainLineSecondText) :
                                   (isBothAtMainLine ? (index === 0 ? mainLineText : mainLineSecondText) : mainLineText)
                         font: (popup.visible) ?
                                   (index === 0 ? textFont : secondTextFont) :
                                   (isBothAtMainLine ? (index === 0 ? textFont : secondTextFont) : textFont)
-                        width: (popup.visible) ?
-                                   ((topComboBoxRow.width - roleInterval) / count) :
-                                   (isBothAtMainLine ? ((topComboBoxRow.width - roleInterval) / count) : contentWidth)
+                        width:(popup.visible) ?
+                                   ((topComboBoxRow.width - roleInterval) / textCurrentRepeater.count) :
+                                   (isBothAtMainLine ? ((topComboBoxRow.width - roleInterval) / textCurrentRepeater.count) : contentWidth)
                         color: (popup.visible) ?
                                    (index === 0 ? hilightColorTopText : hilightColorTopSecondText) :
                                    (isBothAtMainLine ? (index === 0 ? normalColorTopText : normalColorTopSecondText) : normalColorTopText)
