@@ -16,6 +16,7 @@ DapTextForm
     //Function to elide text and check result
     function checkTextElide()
     {
+        var indexOfChar = textMetric.elidedText.indexOf('…');
         if(textMetric.elideWidth < fontMetric.tightBoundingRect(textMetric.text).width)
         {
             switch(textElide)
@@ -29,7 +30,8 @@ DapTextForm
                     break;
 
                 case Text.ElideLeft:
-                    elText = '..' + ((fontMetric.tightBoundingRect(textMetric.elidedText.substring(1, textMetric.elidedText.length - 1)).width +
+                    if(textMetric.elidedText.indexOf('…') !== -1)
+                        elText = '..' + ((fontMetric.tightBoundingRect(textMetric.elidedText.substring(1, textMetric.elidedText.length - 1)).width +
                               fontMetric.tightBoundingRect('..' + textMetric.text.charAt(textMetric.text.length - textMetric.elidedText.length)).width) < textMetric.elideWidth ?
                                  (textMetric.text.charAt(textMetric.text.length - textMetric.elidedText.length)):
                                  '') + textMetric.elidedText.substring(1, textMetric.elidedText.length - 1);
@@ -37,13 +39,14 @@ DapTextForm
                     break;
 
                 case Text.ElideMiddle:
-                    elText = textMetric.elidedText.substring(0, textMetric.elidedText.indexOf('…')) +
-                            ((fontMetric.tightBoundingRect(textMetric.elidedText.substring(0, textMetric.elidedText.indexOf('…'))).width +
-                              fontMetric.tightBoundingRect(textMetric.text.charAt(textMetric.elidedText.indexOf('…')) + '..').width +
-                              fontMetric.tightBoundingRect(textMetric.elidedText.substring(textMetric.elidedText.indexOf('…') + 1, textMetric.elidedText.length)).width) < textMetric.elideWidth ?
-                                 (textMetric.text.charAt(textMetric.elidedText.indexOf('…')) + '..'):
+                    if(textMetric.elidedText.indexOf('…') !== -1)
+                        elText = textMetric.elidedText.substring(0, indexOfChar) +
+                            ((fontMetric.tightBoundingRect(textMetric.elidedText.substring(0, indexOfChar)).width +
+                              fontMetric.tightBoundingRect(textMetric.text.charAt(indexOfChar) + '..').width +
+                              fontMetric.tightBoundingRect(textMetric.elidedText.substring(indexOfChar + 1, textMetric.elidedText.length)).width) < textMetric.elideWidth ?
+                                 (textMetric.text.charAt(indexOfChar) + '..'):
                                  '..') +
-                            textMetric.elidedText.substring(textMetric.elidedText.indexOf('…') + 1, textMetric.elidedText.length);
+                            textMetric.elidedText.substring(indexOfChar + 1, textMetric.elidedText.length);
                     break;
 
                 case Text.ElideNone:
