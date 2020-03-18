@@ -5,10 +5,15 @@ DapOneRoleComboBoxForm
 {
     Component.onCompleted:
     {
-        currentIndex = -1;
-        addDefaultValueToModel(oneTextRole);
-        currentIndex = 0;
-        mainLineText = checkElide(currentIndex);
+        if(currentIndex !== -1)
+        {
+            currentIndex = -1;
+            addDefaultValueToModel(oneTextRole);
+            currentIndex = 0;
+            mainLineText = checkElide(textAt(currentIndex), widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
+        }
+        else
+            mainLineText = checkElide(defaultMainLineText, widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
     }
 
     delegate:

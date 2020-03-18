@@ -50,7 +50,10 @@ DapSimpleComboBoxForm
 
     onCurrentIndexChanged:
     {
-        mainLineText = checkElide(currentIndex);
+        if(currentIndex === -1)
+            mainLineText = checkElide(defaultMainLineText, widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
+        else
+            mainLineText = checkElide(textAt(currentIndex), widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
     }
 
 }

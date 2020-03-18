@@ -5,12 +5,20 @@ DapTwoRoleComboBoxForm
 {
     Component.onCompleted:
     {
-        //It's needed to don't update comboBox while all data will not appended
-        currentIndex = -1;
-        addDefaultValueToModel(firstTextRole);
-        model.setProperty(0, secondTextRole, " ");
-        //Set currentIndex and update comboBox
-        currentIndex = 0;
+        if(currentIndex !== -1)
+        {
+            //It's needed to don't update comboBox while all data will not appended
+            currentIndex = -1;
+            addDefaultValueToModel(firstTextRole);
+            model.setProperty(0, secondTextRole, " ");
+            //Set currentIndex and update comboBox
+            currentIndex = 0;
+        }
+        else
+        {
+            mainLineText = checkElide(defaultMainLineText, widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
+            mainLineSecondText = "";
+        }
     }
 
     //For set different number of roles to mainLine of opened and closed comboBox
@@ -64,8 +72,8 @@ DapTwoRoleComboBoxForm
                                                    (index === 0 ? hilightColorText : hilightColorSecondText) :
                                                    (index === 0 ? normalColorText : normalColorSecondText)
                                     fullText: getModelData(rectangleTextComboBox.comboBoxIndex, (index === 0 ? firstTextRole : secondTextRole))
-                                    textElide: index === 0 ? Text.ElideRight : Text.ElideMiddle
-                                    horizontalAlignment: index === 0 ? Text.AlignLeft : Text.AlignRight
+                                    textElide: index === 0 ? Text.ElideRight : secondTextElide
+                                    horizontalAlignment: index === 0 ? Text.AlignLeft : secondTextAlign
                                     Component.onCompleted:
                                     {
                                         if(rectangleTextComboBox.comboBoxIndex === rectangleTextComboBox.comboBoxCurrentIndex)
@@ -112,12 +120,12 @@ DapTwoRoleComboBoxForm
         //Set font to calculate elideText for mainLineText
         dapComboBoxFontMetric.font = textFont;
         dapComboBoxTextMetric.font = textFont;
-        mainLineText = checkElideRole(getModelData(currentIndex, firstTextRole), mainWidth, Text.ElideRight);
+        mainLineText = checkElide(getModelData(currentIndex, firstTextRole), mainWidth, Text.ElideRight);
 
         //Set font to calculate elideText for mainLineSecondText
         dapComboBoxFontMetric.font = secondTextFont;
         dapComboBoxTextMetric.font = secondTextFont;
-        mainLineSecondText = checkElideRole(getModelData(currentIndex, secondTextRole), mainWidth, Text.ElideMiddle);
+        mainLineSecondText = checkElide(getModelData(currentIndex, secondTextRole), mainWidth, secondTextElide);
 
     }
 

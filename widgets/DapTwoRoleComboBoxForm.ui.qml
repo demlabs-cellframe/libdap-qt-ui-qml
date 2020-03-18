@@ -23,6 +23,10 @@ DapAbstractComboBox
     property string normalColorTopSecondText: normalColorTopText
     ///@details hilightColorTopSecondText Text color of second role in the main line in active state.
     property string hilightColorTopSecondText: hilightColorTopText
+    ///@details secondTextAlign Alidn rules for text of second role
+    property int secondTextAlign: Text.AlignRight
+    ///@details SecondTextElide Elide rules for text of second role
+    property int secondTextElide: Text.ElideMiddle
 
     id: dapTwoRoleComboBox
 

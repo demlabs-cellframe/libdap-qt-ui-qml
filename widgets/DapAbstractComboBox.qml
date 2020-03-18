@@ -47,7 +47,9 @@ DapAbstractComboBoxForm
     //For using by children to get modelData from model with more than one roles
     function getModelData(rowIndex, modelRole)
     {
-        return model.get(rowIndex)[modelRole];
+        if(rowIndex !== -1)
+            return model.get(rowIndex)[modelRole];
+        return " ";
     }
 
     //For using by children to add string from defaultMainLineText to the comboBox model
@@ -61,7 +63,7 @@ DapAbstractComboBoxForm
     }
 
     //For using by children to check ability of adding one more letter to elided text
-    function checkElide(currentIndex)
+   /* function checkElide(currentIndex)
     {
         dapComboBoxTextMetric.text = textAt(currentIndex);
         dapComboBoxTextMetric.elideWidth = widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval);
@@ -73,10 +75,10 @@ DapAbstractComboBoxForm
                        '..');
         else
             return dapComboBoxTextMetric.elidedText.replace('…', '..');
-    }
+    }*/
 
     //For using by children to check ability of adding one more letter to elided text by text and mode
-    function checkElideRole(text1, width1, mode)
+    function checkElide(text1, width1, mode)
     {
         dapComboBoxTextMetric.text = text1;
         dapComboBoxTextMetric.elideWidth = width1;
@@ -92,8 +94,7 @@ DapAbstractComboBoxForm
                            '..');
 
             if(mode === Text.ElideMiddle)
-            {
-                if(dapComboBoxTextMetric.elidedText.indexOf('…') !== -1)
+                if(indexOfChar !== -1)
                     return dapComboBoxTextMetric.elidedText.substring(0, indexOfChar) +
                             ((dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.elidedText.substring(0, indexOfChar)).width +
                               dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.text.charAt(indexOfChar) + '..').width +
@@ -101,8 +102,12 @@ DapAbstractComboBoxForm
                                  (dapComboBoxTextMetric.text.charAt(indexOfChar) + '..'):
                                  '..') +
                             dapComboBoxTextMetric.elidedText.substring(indexOfChar + 1, dapComboBoxTextMetric.elidedText.length);
-
-            }
+            if(mode === Text.ElideLeft)
+                if(indexOfChar !== -1)
+                    return '..' + ((dapComboBoxFontMetric.tightBoundingRect(dapComboBoxTextMetric.elidedText.substring(1, dapComboBoxTextMetric.elidedText.length - 1)).width +
+                          dapComboBoxFontMetric.tightBoundingRect('..' + dapComboBoxTextMetric.text.charAt(dapComboBoxTextMetric.text.length - dapComboBoxTextMetric.elidedText.length)).width) < dapComboBoxTextMetric.elideWidth ?
+                             (dapComboBoxTextMetric.text.charAt(dapComboBoxTextMetric.text.length - dapComboBoxTextMetric.elidedText.length)):
+                             '') + dapComboBoxTextMetric.elidedText.substring(1, dapComboBoxTextMetric.elidedText.length - 1);
         }
         else
             return dapComboBoxTextMetric.elidedText.replace('…', '..');
