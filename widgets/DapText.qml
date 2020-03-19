@@ -14,46 +14,89 @@ DapTextForm
     onWidthChanged: checkTextElide()
 
     //Function to elide text and check result
-    function checkTextElide()
-    {
-        if(textMetric.elideWidth < fontMetric.tightBoundingRect(textMetric.text).width)
+        function checkTextElide()
         {
-            switch(textElide)
+            if(textMetric.elideWidth < fontMetric.tightBoundingRect(textMetric.text).width)
             {
-                case Text.ElideRight:
-                    elText = textMetric.elidedText.substring(0, textMetric.elidedText.length - 1) +
-                                ((fontMetric.tightBoundingRect(textMetric.elidedText.substring(0, textMetric.elidedText.length - 1)).width +
-                                  fontMetric.tightBoundingRect(textMetric.text.charAt(textMetric.elidedText.length - 1) + '..').width) < elText.elideWidth ?
-                                     (textMetric.text.charAt(textMetric.elidedText.length - 3) + '..'):
-                                   '..');
-                    break;
+                //Index of left or right or index of cut
+                var indexOfChar = 0;
+                //Temp string without cutting part
+                var firstString = ""
+                //Width of '..' for current font
+                var twoPointWidth = fontMetric.tightBoundingRect('..').width;
+                if(textMetric.elideWidth <= twoPointWidth + fontMetric.averageCharacterWidth)
+                {
+                    elText = "";
+                    return;
+                }
+                if(textMetric.elideWidth <= 2 * twoPointWidth + 5)
+                {
+                    elText = '..';
+                    return;
+                }
+                switch(textElide)
+                {
+                    case Text.ElideRight:
+                        indexOfChar = textMetric.elidedText.length - 1;
+                        firstString = textMetric.elidedText.substring(0, indexOfChar);
+                        if(fontMetric.tightBoundingRect(firstString + '..').width < elText.elideWidth)
+                        {
+                            if(fontMetric.tightBoundingRect(firstString + textMetric.text.charAt(indexOfChar) + '..').width < elText.elideWidth)
+                                elText = firstString + textMetric.text.charAt(indexOfChar) + '..';
+                            else
+                                elText = firstString + '..';
+                        }
+                        else
+                        {
+                            indexOfChar--;
+                            elText = textMetric.elidedText.substring(0, indexOfChar) + '..';
+                        }
+                        break;
 
-                case Text.ElideLeft:
-                    elText = '..' + ((fontMetric.tightBoundingRect(textMetric.elidedText.substring(1, textMetric.elidedText.length - 1)).width +
-                              fontMetric.tightBoundingRect('..' + textMetric.text.charAt(textMetric.text.length - textMetric.elidedText.length)).width) < textMetric.elideWidth ?
-                                 (textMetric.text.charAt(textMetric.text.length - textMetric.elidedText.length)):
-                                 '') + textMetric.elidedText.substring(1, textMetric.elidedText.length - 1);
+                    case Text.ElideLeft:
+                        indexOfChar = textMetric.elidedText.length;
+                        firstString = textMetric.elidedText.substring(1, indexOfChar);
+                        if(fontMetric.tightBoundingRect('..' + firstString).width < textMetric.elideWidth)
+                        {
+                            if(fontMetric.tightBoundingRect('..' + textMetric.text.charAt(textMetric.text.length - textMetric.elidedText.length) + firstString).width < textMetric.elideWidth)
+                                elText = '..' + textMetric.text.charAt(textMetric.text.length - textMetric.elidedText.length) + firstString;
+                            else
+                                elText = '..' + firstString;
+                        }
+                        else
+                            elText = '..' + textMetric.elidedText.substring(2, indexOfChar);
+                        break;
 
-                    break;
+                    case Text.ElideMiddle:
+                        indexOfChar = textMetric.elidedText.indexOf('…');
+                        //Index of char after '…'
+                        var indexOfNextChar = indexOfChar + 1;
+                        if(indexOfChar !== -1)
+                        {
+                            firstString = textMetric.elidedText.substring(0, indexOfChar);
+                            if(fontMetric.tightBoundingRect(firstString + '..' + textMetric.elidedText.substring(indexOfNextChar, textMetric.elidedText.length)).width < textMetric.elideWidth)
+                                elText = firstString + '..' + textMetric.elidedText.substring(indexOfNextChar, textMetric.elidedText.length);
+                            else
+                            {
+                                indexOfChar--;
+                                firstString = textMetric.elidedText.substring(0, indexOfChar);
+                                if(fontMetric.tightBoundingRect(firstString + '..' + textMetric.elidedText.substring(indexOfNextChar, textMetric.elidedText.length)).width < textMetric.elideWidth)
+                                    elText = firstString + '..' + textMetric.elidedText.substring(indexOfNextChar, textMetric.elidedText.length);
+                                else
+                                    elText = firstString + '..' + textMetric.elidedText.substring(indexOfNextChar, textMetric.elidedText.length);
+                            }
+                        }
+                        else elText = fullText;
+                        break;
 
-                case Text.ElideMiddle:
-                    elText = textMetric.elidedText.substring(0, textMetric.elidedText.indexOf('…')) +
-                            ((fontMetric.tightBoundingRect(textMetric.elidedText.substring(0, textMetric.elidedText.indexOf('…'))).width +
-                              fontMetric.tightBoundingRect(textMetric.text.charAt(textMetric.elidedText.indexOf('…')) + '..').width +
-                              fontMetric.tightBoundingRect(textMetric.elidedText.substring(textMetric.elidedText.indexOf('…') + 1, textMetric.elidedText.length)).width) < textMetric.elideWidth ?
-                                 (textMetric.text.charAt(textMetric.elidedText.indexOf('…')) + '..'):
-                                 '..') +
-                            textMetric.elidedText.substring(textMetric.elidedText.indexOf('…') + 1, textMetric.elidedText.length);
-                    break;
+                    case Text.ElideNone:
+                        elText = fullText;
+                }
 
-                case Text.ElideNone:
-                    elText = fullText;
             }
-
+            else
+                elText = fullText;
         }
-        else
-            elText = textMetric.elidedText.replace('…', '..');
-    }
 
     //Function to copy full text to the clipboard
     function copyFullText()
