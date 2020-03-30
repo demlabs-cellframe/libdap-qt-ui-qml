@@ -32,5 +32,7 @@
         <file>widgets/DapBusyIndicatorForm.ui.qml</file>
         <file>widgets/DapCalendar.qml</file>
         <file>widgets/DapCalendarForm.ui.qml</file>
+        <file>widgets/DapComboBoxCustomRange.qml</file>
+        <file>widgets/DapComboBoxCustomRangeForm.ui.qml</file>
     </qresource>
 </RCC>

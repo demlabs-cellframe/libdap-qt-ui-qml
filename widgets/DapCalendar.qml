@@ -139,7 +139,7 @@ DapCalendarForm
                                        (styleData.date.getFullYear() === new Date(Date.now()).getFullYear())) ?
                                           dapSelectedBackgroundColor :
                                           (styleData.selected ? dapSelectedBackgroundColor : dapNormalBackgroundColor)
-                        border.width: 1 * pt ////////////
+                        border.width: 1 * pt
                         color: styleData.selected ? dapSelectedBackgroundColor : dapNormalBackgroundColor
 
                         Label
@@ -153,4 +153,22 @@ DapCalendarForm
                     }
                 }
         }
+
+    dapCalendar.onDoubleClicked:
+    {
+        dapCalendarResult = Qt.formatDate(dapCalendar.selectedDate, dapCalendarResultFormat);
+        enabled = false;
+    }
+    dapCalendar.onFocusChanged:
+    {
+        enabled = false;
+    }
+    dapCalendar.onMinimumDateChanged:
+    {
+        if(dapCalendarResult !== "" && dapCalendar.selectedDate < dapMinimumDate )
+        {
+            dapCalendar.selectedDate = dapMinimumDate;
+            dapCalendarResult = Qt.formatDate(dapCalendar.selectedDate, dapCalendarResultFormat);
+        }
+    }
 }

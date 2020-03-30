@@ -43,10 +43,10 @@ Rectangle
     ///@details dapSelectedBackgroundColor Set background color for selected day element
     property string dapSelectedBackgroundColor
     ///@details dapMinimumDate Set day elements to invalid before this date
-    property var dapMinimumDate
+    property var dapMinimumDate: new Date(-1, 0, 1)
     ///@details dapWeeksFormat Set format of day of week name
     property int dapDayOfWeeksFormat
-    ///@details dapCalendarStyle Set style for all elements of calendar
+    ///@details dapCalendar To set style for all elements of calendar
     property alias dapCalendar: dapCalendar
     ///@details dapPreviousYearButtonImage Image for button "PreviousYear"
     property string dapPreviousYearButtonImage
@@ -56,6 +56,10 @@ Rectangle
     property string dapNextMonthButtonImage
     ///@details dapNextYearButtonImage Image for button "NextYear"
     property string dapNextYearButtonImage
+    ///@details dapCalendarResult String to save selected date in selected format
+    property string dapCalendarResult: ""
+    ///@details dapCalendarResultFormat Displaying format of date (see https://doc.qt.io/qt-5.9/qml-qtqml-qt.html#formatDateTime-method to set another)
+    property string dapCalendarResultFormat: "dd.MM.yyyy"
 
     id: dapCalendarBackground
     width: dapLeftPadding + dapRightPadding + 7 * dapDayWidth + 6 * dapDayLeftInterval
