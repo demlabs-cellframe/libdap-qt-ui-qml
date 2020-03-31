@@ -60,7 +60,9 @@ ComboBox
     property string normalColorTopText
     ///@details hilightColorTopText Text color in the main line in active state.
     property string hilightColorTopText
-    ///@details unselectedRangeColorTopText Text color in the main line for "dd.mm.yyyy".
+    ///@details selectedRangeColorTopText Text color in the main line for active range element.
+    property string selectedRangeColorTopText
+    ///@details unselectedRangeColorTopText Text color in the main line for not active range element.
     property string unselectedRangeColorTopText
     ///@details textFont Main font of comboBox
     property var textFont
@@ -84,6 +86,10 @@ ComboBox
     property int dapRangeSpacing
     ///@details dapRangeDefaultText Default text - while range element will not selected
     property string dapRangeDefaultText
+    ///@details  dapActiveRangeTextFont Font for active element of range text at main line
+    property var dapActiveRangeTextFont
+    ///@details  dapInactiveRangeTextFont Font for not active element of range text at main line
+    property var dapInactiveRangeTextFont
     ///@details dapCalendars Item with properties for two calendars: for select minimum of range and maximum of range
     property DapCalendar dapCalendars
 
@@ -146,11 +152,11 @@ ComboBox
                     id: textMinimumOfRange
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
-                    font: textFont
+                    font: dapIsRange ? (dapMinimumOfRangeCalendar.visible ? dapActiveRangeTextFont : dapInactiveRangeTextFont) : textFont
                     color: dapIsRange ?
-                               (dapMinimumOfRangeCalendar.dapCalendarResult !== "" ?
-                                    (popup.visible ? hilightColorTopText : normalColorTopText) :
-                                    unselectedRangeColorTopText
+                               (dapMinimumOfRangeCalendar.visible ?
+                                    selectedRangeColorTopText :
+                                    (popup.visible ? hilightColorTopText : unselectedRangeColorTopText)
                                 ) :
                                (popup.visible ? hilightColorTopText : normalColorTopText)
                     text: dapIsRange ?
@@ -164,13 +170,13 @@ ComboBox
                         id: mouseAreaMinimumOfRange
                         anchors.fill: parent
                         enabled: dapIsRange
-                        onClicked: dapMinimumOfRangeCalendar.enabled = !dapMinimumOfRangeCalendar.enabled
+                        onClicked: dapMinimumOfRangeCalendar.visible = !popup.visible
                     }
                     DapCalendar
                     {
                         id: dapMinimumOfRangeCalendar
-                        anchors.left: parent.left
-                        anchors.top: parent.bottom
+                        x: parent.x
+                        y: parent.y + parent.height
                         dapLeftPadding: dapCalendars.dapLeftPadding
                         dapRightPadding: dapCalendars.dapRightPadding
                         dapTopPadding: dapCalendars.dapTopPadding
@@ -195,8 +201,8 @@ ComboBox
                         dapPreviousMonthButtonImage: dapCalendars.dapPreviousMonthButtonImage
                         dapNextMonthButtonImage: dapCalendars.dapNextMonthButtonImage
                         dapNextYearButtonImage: dapCalendars.dapNextYearButtonImage
-                        enabled: false
-                        visible: enabled
+                        dapShadowColor: colorDropShadow
+                        visible: false
                     }
                 }
 
@@ -215,8 +221,8 @@ ComboBox
                     width: contentWidth
                     height: parent.height
                     verticalAlignment: Text.AlignVCenter
-                    font: textFont
-                    color: popup.visible ? hilightColorTopText : normalColorTopText
+                    font: dapIsRange ? dapActiveRangeTextFont : textFont
+                    color: (popup.visible ? hilightColorTopText : selectedRangeColorTopText)
                     text: dapIsRange ? '-' : ''
                 }
             }
@@ -233,11 +239,11 @@ ComboBox
                     id: textMaximumOfRange
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
-                    font: textFont
+                    font: dapIsRange ? (dapMaximumOfRangeCalendar.visible ? dapActiveRangeTextFont : dapInactiveRangeTextFont) : textFont
                     color: dapIsRange ?
-                               (dapMaximumOfRangeCalendar.dapCalendarResult !== "" ?
-                                    (popup.visible ? hilightColorTopText : normalColorTopText) :
-                                    unselectedRangeColorTopText
+                               (dapMaximumOfRangeCalendar.visible ?
+                                    selectedRangeColorTopText :
+                                    (popup.visible ? hilightColorTopText : unselectedRangeColorTopText)
                                 ) :
                                (popup.visible ? hilightColorTopText : normalColorTopText)
                     text: dapIsRange ?
@@ -250,13 +256,13 @@ ComboBox
                         id: mouseAreaMaximumOfRange
                         anchors.fill: parent
                         enabled: dapIsRange
-                        onClicked: dapMaximumOfRangeCalendar.enabled = !dapMaximumOfRangeCalendar.enabled
+                        onClicked: dapMaximumOfRangeCalendar.visible = !popup.visible
                     }
                     DapCalendar
                     {
                         id: dapMaximumOfRangeCalendar
-                        anchors.left: parent.left
-                        anchors.top: parent.bottom
+                        x: parent.x
+                        y: parent.y + parent.height
                         dapLeftPadding: dapCalendars.dapLeftPadding
                         dapRightPadding: dapCalendars.dapRightPadding
                         dapTopPadding: dapCalendars.dapTopPadding
@@ -281,8 +287,8 @@ ComboBox
                         dapPreviousMonthButtonImage: dapCalendars.dapPreviousMonthButtonImage
                         dapNextMonthButtonImage: dapCalendars.dapNextMonthButtonImage
                         dapNextYearButtonImage: dapCalendars.dapNextYearButtonImage
-                        enabled: false
-                        visible: enabled
+                        dapShadowColor: colorDropShadow
+                        visible: false
                         dapMinimumDate: dapMinimumOfRangeCalendar.dapCalendar.selectedDate
                     }
                 }

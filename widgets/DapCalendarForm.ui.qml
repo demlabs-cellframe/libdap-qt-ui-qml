@@ -1,8 +1,10 @@
 import QtQuick 2.4
 import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
 import QtQuick.Controls.Styles 1.4
+import QtGraphicalEffects 1.0
 
-Rectangle
+Popup
 {
     ///@details dapLeftPadding Set left calendar padding
     property int dapLeftPadding
@@ -60,23 +62,47 @@ Rectangle
     property string dapCalendarResult: ""
     ///@details dapCalendarResultFormat Displaying format of date (see https://doc.qt.io/qt-5.9/qml-qtqml-qt.html#formatDateTime-method to set another)
     property string dapCalendarResultFormat: "dd.MM.yyyy"
+    ///@details dapShadowColor Color for calendar shadow
+    property string dapShadowColor
 
-    id: dapCalendarBackground
-    width: dapLeftPadding + dapRightPadding + 7 * dapDayWidth + 6 * dapDayLeftInterval
-    height: dapTopPadding + dapBottomPadding + dapCalendar.__style.control.height
-    color: dapCalendarBackgroundColor
+    id: dapCalendarPopup
 
-    Calendar
-    {
-        id: dapCalendar
-        anchors.fill: parent
-        anchors.leftMargin: dapLeftPadding
-        anchors.rightMargin: dapRightPadding
-        anchors.topMargin: dapTopPadding
-        anchors.bottomMargin: dapBottomPadding
+    background:
+        Rectangle
+        {
+            id: dapCalendarBackground
+            width: dapLeftPadding + dapRightPadding + 7 * dapDayWidth + 6 * dapDayLeftInterval
+            height: dapTopPadding + dapBottomPadding + dapCalendar.__style.control.height
+            color: dapCalendarBackgroundColor
+            Rectangle
+            {
+                id: contentCorner
+                anchors.fill: parent
+            }
 
-        frameVisible: false
-    }
+            DropShadow
+            {
+                anchors.fill: parent
+                source: contentCorner
+                verticalOffset: 9 * pt
+                samples: 13 * pt
+                color: dapShadowColor
+            }
+        }
+
+    contentItem:
+        Calendar
+        {
+            id: dapCalendar
+            anchors.fill: dapCalendarBackground
+            anchors.leftMargin: dapLeftPadding
+            anchors.rightMargin: dapRightPadding
+            anchors.topMargin: dapTopPadding
+            anchors.bottomMargin: dapBottomPadding
+
+            frameVisible: false
+        }
+
 
 }
 

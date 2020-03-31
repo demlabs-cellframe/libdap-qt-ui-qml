@@ -117,7 +117,9 @@ DapCalendarForm
                     {
                         text: dapCalendar.__locale.dayName(styleData.dayOfWeek, dapDayOfWeeksFormat)
                         anchors.centerIn: parent
-                        color: dapNormalTextColor
+                        color:  dapNormalTextColor
+                        horizontalAlignment: Text.AlignHCenter
+                        font: dapCalendarFont
                     }
                 }
 
@@ -149,6 +151,8 @@ DapCalendarForm
                             color: styleData.selected ?
                                        dapSelectedTextColor :
                                        ((styleData.valid && styleData.visibleMonth) ? dapNormalTextColor : dapInvalidTextColor)
+                            horizontalAlignment: Text.AlignHCenter
+                            font: dapCalendarFont
                         }
                     }
                 }
@@ -157,11 +161,7 @@ DapCalendarForm
     dapCalendar.onDoubleClicked:
     {
         dapCalendarResult = Qt.formatDate(dapCalendar.selectedDate, dapCalendarResultFormat);
-        enabled = false;
-    }
-    dapCalendar.onFocusChanged:
-    {
-        enabled = false;
+        visible = false;
     }
     dapCalendar.onMinimumDateChanged:
     {
