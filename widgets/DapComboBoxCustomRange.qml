@@ -11,10 +11,10 @@ DapComboBoxCustomRangeForm
             currentIndex = -1;
             addDefaultValueToModel("name");
             currentIndex = 0;
-            mainLineText = checkElide(textAt(currentIndex), widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
+            dapMainLineText = checkElide(textAt(currentIndex), dapWidthPopupComboBoxNormal - (dapIndicatorWidth + dapIndicatorLeftInterval), Text.ElideRight);
         }
         else
-            mainLineText = checkElide(defaultMainLineText, widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
+            dapMainLineText = checkElide(dapDefaultMainLineText, dapWidthPopupComboBoxNormal - (dapIndicatorWidth + dapIndicatorLeftInterval), Text.ElideRight);
     }
 
 
@@ -29,13 +29,13 @@ DapComboBoxCustomRangeForm
                         if(index === (count - 2))
                         {
                             if(index+1 === currentIndex)
-                                return heightListElement + bottomIntervalListElement;
+                                return dapHeightListElement + dapBottomIntervalListElement;
                             else
-                                return heightListElement + intervalListElement;
+                                return dapHeightListElement + dapIntervalListElement;
                         }
                         if (index === count - 1)
-                            return heightListElement + bottomIntervalListElement;
-                        return heightListElement + intervalListElement;
+                            return dapHeightListElement + dapBottomIntervalListElement;
+                        return dapHeightListElement + dapIntervalListElement;
                     }
                     else return 0;
             }
@@ -45,21 +45,21 @@ DapComboBoxCustomRangeForm
                 {
                     id: rectangleTextComboBox
                     anchors.fill: parent
-                    anchors.topMargin: paddingTopItemDelegate
-                    anchors.leftMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
-                    anchors.rightMargin: popup.visible ? sidePaddingActive : sidePaddingNormal
+                    anchors.topMargin: dapPaddingTopItemDelegate
+                    anchors.leftMargin: popup.visible ? dapSidePaddingActive : dapSidePaddingNormal
+                    anchors.rightMargin: popup.visible ? dapSidePaddingActive : dapSidePaddingNormal
                     color: "transparent"
                     DapText
                     {
                         id: cmbBxItemText
                         width: parent.width - ((index != currentIndex) ?
                                                    0 :
-                                                   (indicatorWidth + indicatorLeftInterval)
+                                                   (dapIndicatorWidth + dapIndicatorLeftInterval)
                                                )
                         height: rectangleTextComboBox.height
                         enabled: false
-                        fontDapText: textFont
-                        textColor: hovered ? hilightColorText : normalColorText
+                        fontDapText: dapTextFont
+                        textColor: hovered ? dapHilightColorText : dapNormalColorText
                         horizontalAlignment: Text.AlignLeft
                         textElide: Text.ElideRight
                         fullText: getModelData(index, "name")
@@ -76,15 +76,15 @@ DapComboBoxCustomRangeForm
                             if(index === count - 2)
                             {
                                 if(index+1 === currentIndex)
-                                    return bottomIntervalListElement;
+                                    return dapBottomIntervalListElement;
                                 else
-                                    return intervalListElement;
+                                    return dapIntervalListElement;
                             }
                             if (index === count - 1)
-                                return bottomIntervalListElement;
-                            return intervalListElement;
+                                return dapBottomIntervalListElement;
+                            return dapIntervalListElement;
                         }
-                        color: hovered ? hilightColor : normalColor
+                        color: hovered ? dapHilightColor : dapNormalColor
                     }
 
                 highlighted: highlightedIndex === index
@@ -94,7 +94,7 @@ DapComboBoxCustomRangeForm
     onCurrentIndexChanged:
     {
         if(currentIndex === -1)
-            mainLineText = checkElide(defaultMainLineText, widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
+            dapMainLineText = checkElide(dapDefaultMainLineText, dapWidthPopupComboBoxNormal - (dapIndicatorWidth + dapIndicatorLeftInterval), Text.ElideRight);
         else
         {
             if(textAt(currentIndex).indexOf("custom") !== -1)
@@ -104,7 +104,7 @@ DapComboBoxCustomRangeForm
             else
             {
                 dapIsRange = false;
-                mainLineText = checkElide(textAt(currentIndex), widthPopupComboBoxNormal - (indicatorWidth + indicatorLeftInterval), Text.ElideRight);
+                dapMainLineText = checkElide(textAt(currentIndex), dapWidthPopupComboBoxNormal - (dapIndicatorWidth + dapIndicatorLeftInterval), Text.ElideRight);
             }
         }
     }
@@ -121,10 +121,10 @@ DapComboBoxCustomRangeForm
     //To add default n=value to comboBox model
     function addDefaultValueToModel(oneTextRole)
     {
-        if(isDefaultNeedToAppend && model.get(0, oneTextRole) !== defaultMainLineText)
+        if(dapIsDefaultNeedToAppend && model.get(0, oneTextRole) !== dapDefaultMainLineText)
         {
             model.insert(0, {});
-            model.setProperty(0, oneTextRole, defaultMainLineText)
+            model.setProperty(0, oneTextRole, dapDefaultMainLineText)
         }
     }
 
