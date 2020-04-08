@@ -107,6 +107,15 @@ DapComboBoxCustomRangeForm
                 dapMainLineText = checkElide(textAt(currentIndex), dapWidthPopupComboBoxNormal - (dapIndicatorWidth + dapIndicatorLeftInterval), Text.ElideRight);
             }
         }
+        dapResultText = varResultText;
+    }
+
+    onVarResultTextChanged:
+    {
+        if(dapIsRange)
+            if(varResultText.indexOf('dd') === -1)
+                if(varResultText.indexOf('-') !== -1 && varResultText.length > varResultText.indexOf('-')+1)
+                    dapResultText = varResultText;
     }
 
 

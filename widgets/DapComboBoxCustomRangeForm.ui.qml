@@ -92,6 +92,10 @@ ComboBox
     property var dapInactiveRangeTextFont
     ///@details dapCalendars Item with properties for two calendars: for select minimum of range and maximum of range
     property DapCalendar dapCalendars
+    ///@details varResultText Temporary variable with currentText of comboBox
+    property string varResultText: (textMinimumOfRange.text + textSeparator.text + textMaximumOfRange.text)
+    ///@details dapResultText CurrentText of comboBox
+    property string dapResultText: textMinimumOfRange.text
 
     width: popup.visible ? dapWidthPopupComboBoxActive : dapWidthPopupComboBoxNormal
     height: popup.visible ? dapHeightComboBoxActive : dapHeightComboBoxNormal
@@ -250,7 +254,7 @@ ComboBox
                               (dapMaximumOfRangeCalendar.dapCalendarResult !== "" ?
                                    dapMaximumOfRangeCalendar.dapCalendarResult :
                                    dapRangeDefaultText
-                               ) : ""
+                               ) : ''
                     MouseArea
                     {
                         id: mouseAreaMaximumOfRange
