@@ -94,7 +94,10 @@ DapComboBoxCustomRangeForm
     onCurrentIndexChanged:
     {
         if(currentIndex === -1)
+        {
             dapMainLineText = checkElide(dapDefaultMainLineText, dapWidthPopupComboBoxNormal - (dapIndicatorWidth + dapIndicatorLeftInterval), Text.ElideRight);
+            dapResultText = varResultText;
+        }
         else
         {
             if(textAt(currentIndex).indexOf("custom") !== -1)
@@ -105,10 +108,10 @@ DapComboBoxCustomRangeForm
             {
                 dapIsRange = false;
                 dapMainLineText = checkElide(textAt(currentIndex), dapWidthPopupComboBoxNormal - (dapIndicatorWidth + dapIndicatorLeftInterval), Text.ElideRight);
+                dapResultText = varResultText;
             }
         }
-        dapResultText = varResultText;
-    }
+        }
 
     onVarResultTextChanged:
     {
