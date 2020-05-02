@@ -16,6 +16,8 @@ DapTextForm
     //Function to elide text and check result
         function checkTextElide()
         {
+            textMetric.elideWidth = width
+
             if(textMetric.elideWidth < fontMetric.tightBoundingRect(textMetric.text).width)
             {
                 //Index of left or right or index of cut
@@ -110,4 +112,5 @@ DapTextForm
         deselect();
         text = elText;
     }
+
 }
