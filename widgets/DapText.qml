@@ -55,6 +55,7 @@ DapTextForm
                         }
                         break;
 
+
                     case Text.ElideLeft:
                         indexOfChar = textMetric.elidedText.length;
                         firstString = textMetric.elidedText.substring(1, indexOfChar);
